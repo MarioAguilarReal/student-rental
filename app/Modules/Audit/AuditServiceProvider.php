@@ -6,6 +6,10 @@ use App\Modules\Audit\Listeners\RecordAuditTrail;
 use App\Modules\Identity\Events\InternalRolesChanged;
 use App\Modules\Identity\Events\UserReactivated;
 use App\Modules\Identity\Events\UserSuspended;
+use App\Modules\Properties\Events\PropertyArchived;
+use App\Modules\Properties\Events\PropertyPaused;
+use App\Modules\Properties\Events\PropertyPublished;
+use App\Modules\Properties\Events\PropertySubmittedForInspection;
 use App\Modules\Shared\Providers\ModuleServiceProvider;
 use App\Modules\Verification\Events\VerificationApproved;
 use App\Modules\Verification\Events\VerificationExpired;
@@ -22,5 +26,9 @@ final class AuditServiceProvider extends ModuleServiceProvider
         InternalRolesChanged::class => [[RecordAuditTrail::class, 'rolesChanged']],
         UserSuspended::class => [[RecordAuditTrail::class, 'userSuspended']],
         UserReactivated::class => [[RecordAuditTrail::class, 'userReactivated']],
+        PropertySubmittedForInspection::class => [[RecordAuditTrail::class, 'propertySubmittedForInspection']],
+        PropertyPublished::class => [[RecordAuditTrail::class, 'propertyPublished']],
+        PropertyPaused::class => [[RecordAuditTrail::class, 'propertyPaused']],
+        PropertyArchived::class => [[RecordAuditTrail::class, 'propertyArchived']],
     ];
 }

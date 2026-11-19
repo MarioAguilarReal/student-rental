@@ -102,6 +102,7 @@ app/Modules/Rentals/
   Listeners/
   Models/
   Policies/
+  Presenters/       Read-only shapes for the UI, usable by other modules and the dashboard
   routes.php
   RentalsServiceProvider.php   # registra rutas, policies, listeners, bindings y schedule
 ```

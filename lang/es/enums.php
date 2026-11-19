@@ -80,4 +80,33 @@ return [
         'rejected' => 'Rechazado',
     ],
 
+    'AmenityScope' => ['property' => 'Áreas comunes', 'unit' => 'Espacio individual', 'both' => 'Ambos'],
+
+    'AmenityCategory' => [
+        'basics' => 'Básicos', 'kitchen' => 'Cocina', 'bathroom' => 'Baño', 'laundry' => 'Lavandería',
+        'study' => 'Estudio', 'comfort' => 'Confort', 'safety' => 'Seguridad', 'outdoor' => 'Exterior',
+    ],
+
+    'ManagementMode' => ['self_managed' => 'Autogestionada', 'managed' => 'Administrada'],
+
+    'PropertyType' => ['house' => 'Casa', 'apartment' => 'Departamento', 'room_in_house' => 'Cuarto en casa', 'other' => 'Otro'],
+
+    'PropertyStatus' => [
+        'draft' => 'Borrador', 'pending_inspection' => 'Pendiente de inspección', 'approved' => 'Aprobada',
+        'rejected' => 'Rechazada', 'published' => 'Publicada', 'paused' => 'Pausada', 'archived' => 'Archivada',
+    ],
+
+    'PauseReason' => ['manual' => 'Pausa manual', 'inspection_expired' => 'Inspección vencida'],
+
+    'UnitType' => [
+        'entire_place' => 'Lugar completo', 'private_room' => 'Habitación privada',
+        'shared_room' => 'Habitación compartida', 'bed' => 'Cama',
+    ],
+
+    'UnitStatus' => ['active' => 'Activo', 'paused' => 'Pausado'],
+
+    'GenderPolicy' => ['mixed' => 'Mixto', 'women_only' => 'Solo mujeres', 'men_only' => 'Solo hombres'],
+
+    'UnitTemplate' => ['entire_place' => 'Completa', 'by_rooms' => 'Por habitaciones', 'mixed' => 'Completa y por habitaciones'],
+
 ];

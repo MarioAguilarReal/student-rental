@@ -12,7 +12,7 @@ import { useTranslation } from '@/lib/i18n';
 
 export function NavMain({
     items,
-    label = 'Platform',
+    label,
 }: {
     items: NavItem[];
     label?: string;
@@ -23,7 +23,7 @@ export function NavMain({
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>
+            {label && <SidebarGroupLabel>{t(label)}</SidebarGroupLabel>}
             <SidebarMenu>
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>

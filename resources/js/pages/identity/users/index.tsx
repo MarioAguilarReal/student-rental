@@ -1,16 +1,12 @@
-import { Form, Head, Link, router } from '@inertiajs/react';
-import { Search } from 'lucide-react';
-import Heading from '@/components/heading';
+import { Head, Link, router } from '@inertiajs/react';
+import { ChevronRight, Search, Users } from 'lucide-react';
+import EmptyState from '@/components/empty-state';
+import Page from '@/components/page';
 import Pagination from '@/components/pagination';
+import PersonAvatar from '@/components/person-avatar';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { NativeSelect } from '@/components/ui/native-select';
 import { useTranslation } from '@/lib/i18n';
 import { index, show } from '@/routes/users';
 import type { Option, Paginated } from '@/types';
@@ -29,88 +25,80 @@ type Props = {
     roleOptions: Option[];
 };
 
-const ALL = 'all';
-
 export default function UsersIndex({ users, filters, roleOptions }: Props) {
     const { t } = useTranslation();
-
-    const filterByRole = (role: string) =>
+    const filter = (changes: Record<string, string>) =>
         router.get(
-            index.url({
-                query: {
-                    ...(filters.search ? { search: filters.search } : {}),
-                    ...(role === ALL ? {} : { role }),
-                },
-            }),
-            {},
+            index.url(),
+            Object.fromEntries(
+                Object.entries({
+                    search: filters.search,
+                    role: filters.role ?? '',
+                    ...changes,
+                }).filter(([, value]) => value),
+            ),
             { preserveState: true, replace: true },
         );
 
     return (
         <>
             <Head title={t('Users')} />
-
-            <div className="space-y-4 p-4">
-                <Heading
-                    title={t('Users')}
-                    description={t('Manage internal roles and suspensions.')}
-                />
-
-                <div className="flex flex-wrap gap-2">
-                    <Form
-                        {...index.form()}
-                        transform={(data) => ({
-                            ...data,
-                            ...(filters.role ? { role: filters.role } : {}),
-                        })}
-                        options={{ preserveState: true, replace: true }}
-                        className="relative min-w-60 flex-1"
-                    >
-                        <Search className="pointer-events-none absolute top-2.5 left-3 size-4 text-muted-foreground" />
+            <Page
+                title={t('Users')}
+                description={t('Manage internal roles and suspensions.')}
+            >
+                <div className="mb-6 flex flex-wrap gap-2">
+                    <div className="relative min-w-60 flex-1">
+                        <Search
+                            className="pointer-events-none absolute top-3 left-3 size-4 text-muted-foreground"
+                            aria-hidden
+                        />
                         <Input
-                            name="search"
+                            className="pl-9"
                             defaultValue={filters.search}
                             placeholder={t('Search by name or email')}
-                            className="pl-9"
                             aria-label={t('Search by name or email')}
+                            onKeyDown={(event) =>
+                                event.key === 'Enter' &&
+                                filter({ search: event.currentTarget.value })
+                            }
                         />
-                    </Form>
-                    <Select
-                        value={filters.role ?? ALL}
-                        onValueChange={filterByRole}
+                    </div>
+                    <NativeSelect
+                        className="w-48"
+                        aria-label={t('Role')}
+                        value={filters.role ?? ''}
+                        onChange={(event) =>
+                            filter({ role: event.target.value })
+                        }
                     >
-                        <SelectTrigger className="w-48" aria-label={t('Role')}>
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value={ALL}>
-                                {t('All roles')}
-                            </SelectItem>
-                            {roleOptions.map((option) => (
-                                <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                >
-                                    {option.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                        <option value="">{t('All roles')}</option>
+                        {roleOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </NativeSelect>
                 </div>
 
                 {users.data.length === 0 ? (
-                    <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-                        {t('No users match the search.')}
-                    </p>
+                    <EmptyState
+                        icon={Users}
+                        title={t('No users match the search.')}
+                    />
                 ) : (
-                    <ul className="divide-y rounded-lg border">
+                    <ul className="divide-y rounded-xl border">
                         {users.data.map((user) => (
                             <li key={user.id}>
                                 <Link
                                     href={show(user.id)}
-                                    className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 hover:bg-accent"
+                                    className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
                                 >
-                                    <div className="min-w-0">
+                                    <PersonAvatar
+                                        id={user.id}
+                                        name={user.name}
+                                    />
+                                    <div className="min-w-0 flex-1">
                                         <p className="truncate font-medium">
                                             {user.name}
                                         </p>
@@ -118,18 +106,22 @@ export default function UsersIndex({ users, filters, roleOptions }: Props) {
                                             {user.email}
                                         </p>
                                     </div>
-                                    <div className="flex flex-wrap gap-1">
+                                    <div className="hidden flex-wrap justify-end gap-1 sm:flex">
                                         {user.suspended && (
-                                            <Badge variant="destructive">
+                                            <Badge variant="negative">
                                                 {t('Suspended')}
                                             </Badge>
                                         )}
                                         {user.roles.map((role) => (
-                                            <Badge key={role} variant="outline">
+                                            <Badge key={role} variant="neutral">
                                                 {role}
                                             </Badge>
                                         ))}
                                     </div>
+                                    <ChevronRight
+                                        className="size-4 shrink-0 text-muted-foreground"
+                                        aria-hidden
+                                    />
                                 </Link>
                             </li>
                         ))}
@@ -137,7 +129,7 @@ export default function UsersIndex({ users, filters, roleOptions }: Props) {
                 )}
 
                 <Pagination page={users} />
-            </div>
+            </Page>
         </>
     );
 }

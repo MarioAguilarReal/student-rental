@@ -1,7 +1,8 @@
 import { Form, Head } from '@inertiajs/react';
 import { FileText } from 'lucide-react';
 import { useState } from 'react';
-import Heading from '@/components/heading';
+import Page from '@/components/page';
+import FileField from '@/components/file-field';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -76,88 +77,93 @@ export default function VerificationShow({
         <>
             <Head title={t('My verification')} />
 
-            <div className="mx-auto w-full max-w-3xl space-y-6 p-4">
-                <Heading
-                    title={t('My verification')}
-                    description={t(
-                        'We verify every member of the community to keep it safe.',
-                    )}
-                />
-
-                {profiles.map((profile) => (
-                    <Card key={profile.id}>
-                        <CardHeader>
-                            <div className="flex flex-wrap items-center justify-between gap-2">
-                                <CardTitle>
-                                    {t(':kind profile', {
-                                        kind: profile.kind_label,
-                                    })}
-                                </CardTitle>
-                                <VerificationStatusBadge
-                                    status={profile.status}
-                                    label={profile.status_label}
-                                />
-                            </div>
-                            <CardDescription>
-                                <StatusMessage profile={profile} />
-                            </CardDescription>
-                        </CardHeader>
-
-                        <CardContent className="space-y-6">
-                            {profile.documents.length > 0 && (
-                                <DocumentList documents={profile.documents} />
-                            )}
-
-                            {profile.accepts_submissions &&
-                                (profile.kind === 'client' ? (
-                                    <ClientForm
-                                        profile={profile}
-                                        institutions={institutions}
-                                        communityTypes={communityTypes}
-                                    />
-                                ) : (
-                                    <OwnerForm />
-                                ))}
-                        </CardContent>
-                    </Card>
-                ))}
-
-                {missingProfiles.length > 0 && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>{t('Add another profile')}</CardTitle>
-                            <CardDescription>
-                                {t(
-                                    'You can rent and list properties with the same account.',
-                                )}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex flex-wrap gap-2">
-                            {missingProfiles.map((option) => (
-                                <Form
-                                    key={option.value}
-                                    {...addAccountProfile.form()}
-                                    transform={(data) => ({
-                                        ...data,
-                                        role: option.value,
-                                    })}
-                                >
-                                    {({ processing }) => (
-                                        <Button
-                                            variant="outline"
-                                            disabled={processing}
-                                        >
-                                            {t('Add :profile profile', {
-                                                profile: option.label,
-                                            })}
-                                        </Button>
-                                    )}
-                                </Form>
-                            ))}
-                        </CardContent>
-                    </Card>
+            <Page
+                width="narrow"
+                title={t('My verification')}
+                description={t(
+                    'We verify every member of the community to keep it safe.',
                 )}
-            </div>
+            >
+                <div className="space-y-6">
+                    {profiles.map((profile) => (
+                        <Card key={profile.id}>
+                            <CardHeader>
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <CardTitle>
+                                        {t(':kind profile', {
+                                            kind: profile.kind_label,
+                                        })}
+                                    </CardTitle>
+                                    <VerificationStatusBadge
+                                        status={profile.status}
+                                        label={profile.status_label}
+                                    />
+                                </div>
+                                <CardDescription>
+                                    <StatusMessage profile={profile} />
+                                </CardDescription>
+                            </CardHeader>
+
+                            <CardContent className="space-y-6">
+                                {profile.documents.length > 0 && (
+                                    <DocumentList
+                                        documents={profile.documents}
+                                    />
+                                )}
+
+                                {profile.accepts_submissions &&
+                                    (profile.kind === 'client' ? (
+                                        <ClientForm
+                                            profile={profile}
+                                            institutions={institutions}
+                                            communityTypes={communityTypes}
+                                        />
+                                    ) : (
+                                        <OwnerForm />
+                                    ))}
+                            </CardContent>
+                        </Card>
+                    ))}
+
+                    {missingProfiles.length > 0 && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>
+                                    {t('Add another profile')}
+                                </CardTitle>
+                                <CardDescription>
+                                    {t(
+                                        'You can rent and list properties with the same account.',
+                                    )}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex flex-wrap gap-2">
+                                {missingProfiles.map((option) => (
+                                    <Form
+                                        key={option.value}
+                                        {...addAccountProfile.form()}
+                                        transform={(data) => ({
+                                            ...data,
+                                            role: option.value,
+                                        })}
+                                    >
+                                        {({ processing }) => (
+                                            <Button
+                                                variant="outline"
+                                                disabled={processing}
+                                            >
+                                                {t('Add :profile profile', {
+                                                    profile: option.label,
+                                                })}
+                                            </Button>
+                                        )}
+                                    </Form>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    )}
+                </div>
+            </Page>
         </>
     );
 }
@@ -309,15 +315,12 @@ function ClientForm({
                                 </span>
                             )}
                         </Label>
-                        <Input
+                        <FileField
                             id="credential"
                             name="credential"
-                            type="file"
                             accept={ACCEPTED_FILES}
+                            hint={t('JPG, PNG or PDF, up to 10 MB.')}
                         />
-                        <p className="text-xs text-muted-foreground">
-                            {t('JPG, PNG or PDF, up to 10 MB.')}
-                        </p>
                         <InputError message={errors.credential} />
                     </div>
 
@@ -327,11 +330,11 @@ function ClientForm({
                                 <Label htmlFor="acceptance_letter">
                                     {t('Acceptance letter')}
                                 </Label>
-                                <Input
+                                <FileField
                                     id="acceptance_letter"
                                     name="acceptance_letter"
-                                    type="file"
                                     accept={ACCEPTED_FILES}
+                                    hint={t('JPG, PNG or PDF, up to 10 MB.')}
                                 />
                                 <InputError
                                     message={errors.acceptance_letter}
@@ -377,17 +380,14 @@ function OwnerForm() {
 
                     <div className="grid gap-2">
                         <Label htmlFor="official_id">{t('Official ID')}</Label>
-                        <Input
+                        <FileField
                             id="official_id"
                             name="official_id"
-                            type="file"
                             accept={ACCEPTED_FILES}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                            {t(
+                            hint={t(
                                 'Passport, voter ID or another government ID. JPG, PNG or PDF, up to 10 MB.',
                             )}
-                        </p>
+                        />
                         <InputError message={errors.official_id} />
                     </div>
 

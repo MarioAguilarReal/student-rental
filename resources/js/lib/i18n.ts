@@ -16,6 +16,15 @@ export function translate(
 ): string {
     let text = translations[key] ?? key;
 
+    // Laravel-style plurals: "1 persona|:count personas", chosen by the :count replacement.
+    if (text.includes('|') && typeof replacements.count === 'number') {
+        const [singular, plural] = text.split('|');
+        text =
+            Math.abs(replacements.count) === 1
+                ? singular
+                : (plural ?? singular);
+    }
+
     // Longest placeholders first, so ":count" never clobbers ":counter".
     const names = Object.keys(replacements).sort((a, b) => b.length - a.length);
 

@@ -34,6 +34,13 @@ Plataforma de renta tipo Airbnb para docentes, estudiantes y estudiantes de inte
     - Frontend: `const { t } = useTranslation();` de `@/lib/i18n` y luego `t('English source text')`.
     - La traducción va en `lang/es.json`; las etiquetas de enums, en `lang/es/enums.php`.
 
+## Interfaz (sistema de diseño)
+
+- Sigue `docs/spec/09-sistema-diseno.md`. Toda pantalla usa `Page` (título 22 px, una oración, acción principal a la derecha) y los componentes del sistema: `ListingCard`, `FilterChips`, `PersonAvatar`, `ProgressSteps`, `EmptyState`, `FileField`, `FormActions`, `Badge` con tonos.
+- Colores solo desde los tokens de `resources/css/app.css` (`primary` negro para el botón principal; `brand` solo en logotipo, selección y dato principal). Nunca hex sueltos en componentes, salvo los tintes de identidad de `PersonAvatar`.
+- Sin degradados, sombras en reposo, íconos en círculos de color, mayúsculas espaciadas ni emojis. Radios: controles `rounded-lg`, tarjetas y fotos `rounded-xl`, píldoras `rounded-full`.
+- Formularios largos por secciones (patrón del editor de propiedades) con un "Guardar" por sección en `FormActions`. Listas vacías con `EmptyState`.
+
 ## Base de datos
 
 - PostgreSQL también en las pruebas (`student_rental_testing`). Está disponible `btree_gist` para restricciones de exclusión.

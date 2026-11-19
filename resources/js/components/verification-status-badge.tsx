@@ -1,16 +1,16 @@
 import { Badge } from '@/components/ui/badge';
 import type { VerificationStatus } from '@/types';
 
-const variants: Record<
+const tones: Record<
     VerificationStatus,
-    'default' | 'secondary' | 'destructive' | 'outline'
+    'neutral' | 'positive' | 'negative' | 'warning' | 'brand'
 > = {
-    unverified: 'outline',
-    email_verified: 'outline',
-    in_review: 'secondary',
-    verified: 'default',
-    rejected: 'destructive',
-    expired: 'destructive',
+    unverified: 'neutral',
+    email_verified: 'warning',
+    in_review: 'brand',
+    verified: 'positive',
+    rejected: 'negative',
+    expired: 'negative',
 };
 
 export default function VerificationStatusBadge({
@@ -20,5 +20,5 @@ export default function VerificationStatusBadge({
     status: VerificationStatus;
     label: string;
 }) {
-    return <Badge variant={variants[status]}>{label}</Badge>;
+    return <Badge variant={tones[status]}>{label}</Badge>;
 }

@@ -36,7 +36,7 @@ class ReviewController extends Controller
             ->withQueryString()
             ->through(fn (VerificationProfile $profile): array => [
                 'id' => $profile->id,
-                'user' => ['name' => $profile->user->name, 'email' => $profile->user->email],
+                'user' => ['id' => $profile->user->id, 'name' => $profile->user->name, 'email' => $profile->user->email],
                 'kind' => $profile->kind->label(),
                 'community_type' => $profile->community_type?->label(),
                 'institution' => $profile->institution?->displayName(),
@@ -45,8 +45,16 @@ class ReviewController extends Controller
                 'documents_count' => $profile->documents_count,
             ]);
 
+        $counts = VerificationProfile::query()
+            ->where('status', VerificationStatus::InReview)
+            ->toBase()->selectRaw('kind, count(*) as total')->groupBy('kind')->pluck('total', 'kind');
+
         return Inertia::render('verification/reviews/index', [
             'profiles' => $profiles,
+            'kindCounts' => [
+                'all' => (int) $counts->sum(),
+                ...collect(VerificationKind::cases())->mapWithKeys(fn (VerificationKind $case) => [$case->value => (int) ($counts[$case->value] ?? 0)])->all(),
+            ],
             'filters' => ['kind' => $kind?->value],
             'kindOptions' => VerificationKind::options(),
         ]);

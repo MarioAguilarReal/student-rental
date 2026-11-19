@@ -35,3 +35,12 @@ Historias: HU-01.01 a HU-01.04, HU-02.01 a HU-02.05 y HU-03.01 (también HU-01.0
 - **Catalog:** instituciones con dominios de correo únicos y campus con coordenadas.
 - **Notifications / Audit:** correo + notificación en la base de datos para cada decisión; bitácora de verificaciones, roles y suspensiones.
 - Pendiente de interfaz: el centro de notificaciones (HU-10.02, iteración 8) — las notificaciones ya se guardan.
+
+## Iteración 2 — ✅ completada (2026-11-19)
+
+Historias: HU-03.02 y HU-04.01 a HU-04.09.
+
+- **Catalog:** amenidades (categoría y ámbito: áreas comunes, espacio o ambos) y reglas de la casa, con un catálogo inicial que se siembra en todos los entornos.
+- **Properties:** alta (también a nombre de un propietario, RN-15), datos generales, dirección con pin en mapa, árbol de espacios con plantillas iniciales y validación de jerarquía (RN-20), convivencia que solo puede restringirse (RN-30, RN-31), amenidades por nivel, reglas de la casa, hasta 30 fotos con miniaturas WEBP, comprobante de propiedad privado (D-49), solicitud de inspección (RN-06), publicación con lista de requisitos (RN-10), pausa y archivado (RN-13).
+- **Cambios críticos (RN-11):** cambiar la ubicación o agregar, quitar o cambiar el tipo o la capacidad de un espacio regresa a inspección una propiedad ya inspeccionada, con aviso previo en la interfaz.
+- **Dependencias con iteraciones futuras:** publicar exige un plan de precio activo (contrato `Pricing\Contracts\RatePlanCatalog`, que en la Iteración 3 deja de responder "no") y una inspección aprobada (Iteración 4). Archivar y quitar espacios revisarán rentas bloqueantes en la Iteración 6.

@@ -5,6 +5,10 @@ namespace App\Modules\Audit\Listeners;
 use App\Modules\Identity\Events\InternalRolesChanged;
 use App\Modules\Identity\Events\UserReactivated;
 use App\Modules\Identity\Events\UserSuspended;
+use App\Modules\Properties\Events\PropertyArchived;
+use App\Modules\Properties\Events\PropertyPaused;
+use App\Modules\Properties\Events\PropertyPublished;
+use App\Modules\Properties\Events\PropertySubmittedForInspection;
 use App\Modules\Verification\Events\VerificationApproved;
 use App\Modules\Verification\Events\VerificationExpired;
 use App\Modules\Verification\Events\VerificationRejected;
@@ -61,5 +65,27 @@ class RecordAuditTrail
     {
         activity('identity')->performedOn($event->user)->causedBy($event->actor)
             ->event('reactivated')->log('Account reactivated');
+    }
+
+    public function propertySubmittedForInspection(PropertySubmittedForInspection $event): void
+    {
+        activity('property')->performedOn($event->property)->causedByAnonymous()
+            ->event('submitted_for_inspection')->withProperties(['reason' => $event->reason])
+            ->log('Property submitted for inspection');
+    }
+
+    public function propertyPublished(PropertyPublished $event): void
+    {
+        activity('property')->performedOn($event->property)->causedBy($event->actor)->event('published')->log('Property published');
+    }
+
+    public function propertyPaused(PropertyPaused $event): void
+    {
+        activity('property')->performedOn($event->property)->causedBy($event->actor)->event('paused')->log('Property paused');
+    }
+
+    public function propertyArchived(PropertyArchived $event): void
+    {
+        activity('property')->performedOn($event->property)->causedBy($event->actor)->event('archived')->log('Property archived');
     }
 }

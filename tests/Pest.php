@@ -75,3 +75,14 @@ function userWithRole(Role $role, array $attributes = []): User
 
     return $user->fresh() ?? $user;
 }
+
+/**
+ * An owner whose identity is already verified (RN-06).
+ */
+function verifiedOwner(array $attributes = []): User
+{
+    $owner = userWithRole(Role::Owner, $attributes);
+    $owner->verificationProfiles()->update(['status' => 'verified', 'reviewed_at' => now()]);
+
+    return $owner->fresh() ?? $owner;
+}

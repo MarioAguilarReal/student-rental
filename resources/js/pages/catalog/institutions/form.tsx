@@ -1,6 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import { Trash2 } from 'lucide-react';
-import Heading from '@/components/heading';
+import Page from '@/components/page';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import {
@@ -49,138 +49,150 @@ export default function InstitutionForm({ institution }: Props) {
         <>
             <Head title={title} />
 
-            <div className="mx-auto w-full max-w-3xl space-y-6 p-4">
-                <Heading title={title} />
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle>{t('Details')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Form
-                            {...(institution
-                                ? update.form(institution.id)
-                                : store.form())}
-                            options={{ preserveScroll: true }}
-                            transform={(data) => ({
-                                ...data,
-                                is_active:
-                                    data.is_active === 'on' ||
-                                    data.is_active === true,
-                            })}
-                            className="space-y-4"
-                        >
-                            {({ processing, errors }) => (
-                                <>
-                                    <div className="grid gap-4 sm:grid-cols-[1fr_10rem]">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="name">
-                                                {t('Name')}
-                                            </Label>
-                                            <Input
-                                                id="name"
-                                                name="name"
-                                                required
-                                                defaultValue={institution?.name}
-                                            />
-                                            <InputError message={errors.name} />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="acronym">
-                                                {t('Acronym')}
-                                            </Label>
-                                            <Input
-                                                id="acronym"
-                                                name="acronym"
-                                                defaultValue={
-                                                    institution?.acronym ?? ''
-                                                }
-                                            />
-                                            <InputError
-                                                message={errors.acronym}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="email_domains">
-                                            {t('Email domains')}
-                                        </Label>
-                                        <Input
-                                            id="email_domains"
-                                            name="email_domains"
-                                            required
-                                            placeholder="uabc.edu.mx, uabc.mx"
-                                            defaultValue={institution?.email_domains.join(
-                                                ', ',
-                                            )}
-                                        />
-                                        <p className="text-xs text-muted-foreground">
-                                            {t(
-                                                'Separate them with commas. Subdomains are included (alumnos.uni.mx matches uni.mx).',
-                                            )}
-                                        </p>
-                                        <InputError
-                                            message={
-                                                errors.email_domains ??
-                                                errors['email_domains.0']
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className="flex items-center gap-3">
-                                        <Checkbox
-                                            id="is_active"
-                                            name="is_active"
-                                            defaultChecked={
-                                                institution?.is_active ?? true
-                                            }
-                                        />
-                                        <Label htmlFor="is_active">
-                                            {t(
-                                                'Active (members can select it)',
-                                            )}
-                                        </Label>
-                                    </div>
-
-                                    <Button disabled={processing}>
-                                        {processing && <Spinner />}
-                                        {t('Save')}
-                                    </Button>
-                                </>
-                            )}
-                        </Form>
-                    </CardContent>
-                </Card>
-
-                {institution && (
+            <Page
+                width="narrow"
+                title={title}
+                back={{ href: index(), label: t('Institutions') }}
+            >
+                <div className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>{t('Campuses')}</CardTitle>
-                            <CardDescription>
-                                {t(
-                                    'Coordinates in decimal degrees, e.g. 32.5317, -117.0237.',
-                                )}
-                            </CardDescription>
+                            <CardTitle>{t('Details')}</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-6">
-                            {institution.campuses.map((campus) => (
-                                <CampusForm
-                                    key={campus.id}
-                                    institutionId={institution.id}
-                                    campus={campus}
-                                />
-                            ))}
-                            <div className="space-y-2">
-                                <h3 className="text-sm font-medium">
-                                    {t('Add campus')}
-                                </h3>
-                                <CampusForm institutionId={institution.id} />
-                            </div>
+                        <CardContent>
+                            <Form
+                                {...(institution
+                                    ? update.form(institution.id)
+                                    : store.form())}
+                                options={{ preserveScroll: true }}
+                                transform={(data) => ({
+                                    ...data,
+                                    is_active:
+                                        data.is_active === 'on' ||
+                                        data.is_active === true,
+                                })}
+                                className="space-y-4"
+                            >
+                                {({ processing, errors }) => (
+                                    <>
+                                        <div className="grid gap-4 sm:grid-cols-[1fr_10rem]">
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="name">
+                                                    {t('Name')}
+                                                </Label>
+                                                <Input
+                                                    id="name"
+                                                    name="name"
+                                                    required
+                                                    defaultValue={
+                                                        institution?.name
+                                                    }
+                                                />
+                                                <InputError
+                                                    message={errors.name}
+                                                />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="acronym">
+                                                    {t('Acronym')}
+                                                </Label>
+                                                <Input
+                                                    id="acronym"
+                                                    name="acronym"
+                                                    defaultValue={
+                                                        institution?.acronym ??
+                                                        ''
+                                                    }
+                                                />
+                                                <InputError
+                                                    message={errors.acronym}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="email_domains">
+                                                {t('Email domains')}
+                                            </Label>
+                                            <Input
+                                                id="email_domains"
+                                                name="email_domains"
+                                                required
+                                                placeholder="uabc.edu.mx, uabc.mx"
+                                                defaultValue={institution?.email_domains.join(
+                                                    ', ',
+                                                )}
+                                            />
+                                            <p className="text-xs text-muted-foreground">
+                                                {t(
+                                                    'Separate them with commas. Subdomains are included (alumnos.uni.mx matches uni.mx).',
+                                                )}
+                                            </p>
+                                            <InputError
+                                                message={
+                                                    errors.email_domains ??
+                                                    errors['email_domains.0']
+                                                }
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center gap-3">
+                                            <Checkbox
+                                                id="is_active"
+                                                name="is_active"
+                                                defaultChecked={
+                                                    institution?.is_active ??
+                                                    true
+                                                }
+                                            />
+                                            <Label htmlFor="is_active">
+                                                {t(
+                                                    'Active (members can select it)',
+                                                )}
+                                            </Label>
+                                        </div>
+
+                                        <Button disabled={processing}>
+                                            {processing && <Spinner />}
+                                            {t('Save')}
+                                        </Button>
+                                    </>
+                                )}
+                            </Form>
                         </CardContent>
                     </Card>
-                )}
-            </div>
+
+                    {institution && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{t('Campuses')}</CardTitle>
+                                <CardDescription>
+                                    {t(
+                                        'Coordinates in decimal degrees, e.g. 32.5317, -117.0237.',
+                                    )}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {institution.campuses.map((campus) => (
+                                    <CampusForm
+                                        key={campus.id}
+                                        institutionId={institution.id}
+                                        campus={campus}
+                                    />
+                                ))}
+                                <div className="space-y-2">
+                                    <h3 className="text-sm font-medium">
+                                        {t('Add campus')}
+                                    </h3>
+                                    <CampusForm
+                                        institutionId={institution.id}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+                </div>
+            </Page>
         </>
     );
 }
