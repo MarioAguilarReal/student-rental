@@ -12,9 +12,3 @@ parameters:
 
     level: 7
 
-    ignoreErrors:
-        # Temporary: no status enum uses this trait yet. The first one (Iteración 1) makes this
-        # entry unmatched and PHPStan will fail until it is removed.
-        -
-            identifier: trait.unused
-            path: app/Modules/Shared/Enums/Concerns/HasTransitions.php

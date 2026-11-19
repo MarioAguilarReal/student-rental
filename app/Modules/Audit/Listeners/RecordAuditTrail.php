@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Modules\Audit\Listeners;
+
+use App\Modules\Identity\Events\InternalRolesChanged;
+use App\Modules\Identity\Events\UserReactivated;
+use App\Modules\Identity\Events\UserSuspended;
+use App\Modules\Verification\Events\VerificationApproved;
+use App\Modules\Verification\Events\VerificationExpired;
+use App\Modules\Verification\Events\VerificationRejected;
+use App\Modules\Verification\Events\VerificationSubmitted;
+
+/**
+ * RN-90 / HU-11.01: who changed what and when. Events are dispatched after commit,
+ * so only changes that really happened are recorded.
+ */
+class RecordAuditTrail
+{
+    public function verificationSubmitted(VerificationSubmitted $event): void
+    {
+        activity('verification')->performedOn($event->profile)->causedBy($event->profile->user)
+            ->event('submitted')->withProperties(['kind' => $event->profile->kind->value])
+            ->log('Verification submitted');
+    }
+
+    public function verificationApproved(VerificationApproved $event): void
+    {
+        activity('verification')->performedOn($event->profile)->causedBy($event->reviewer)
+            ->event('approved')->withProperties(['verified_until' => $event->profile->verified_until?->toDateString()])
+            ->log('Verification approved');
+    }
+
+    public function verificationRejected(VerificationRejected $event): void
+    {
+        activity('verification')->performedOn($event->profile)->causedBy($event->reviewer)
+            ->event('rejected')->withProperties(['reason' => $event->profile->rejection_reason])
+            ->log('Verification rejected');
+    }
+
+    public function verificationExpired(VerificationExpired $event): void
+    {
+        activity('verification')->performedOn($event->profile)->causedByAnonymous()
+            ->event('expired')->log('Verification expired');
+    }
+
+    public function rolesChanged(InternalRolesChanged $event): void
+    {
+        activity('identity')->performedOn($event->user)->causedBy($event->actor)
+            ->event('roles_changed')->withProperties(['before' => $event->before, 'after' => $event->after])
+            ->log('Roles changed');
+    }
+
+    public function userSuspended(UserSuspended $event): void
+    {
+        activity('identity')->performedOn($event->user)->causedBy($event->actor)
+            ->event('suspended')->withProperties(['reason' => $event->reason])
+            ->log('Account suspended');
+    }
+
+    public function userReactivated(UserReactivated $event): void
+    {
+        activity('identity')->performedOn($event->user)->causedBy($event->actor)
+            ->event('reactivated')->log('Account reactivated');
+    }
+}

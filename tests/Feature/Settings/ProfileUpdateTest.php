@@ -28,7 +28,8 @@ class ProfileUpdateTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch(route('profile.update'), [
-                'name' => 'Test User',
+                'first_name' => 'Test',
+                'last_name' => 'User',
                 'email' => 'test@example.com',
             ]);
 
@@ -50,7 +51,8 @@ class ProfileUpdateTest extends TestCase
         $this
             ->actingAs($user)
             ->patch(route('profile.update'), [
-                'name' => 'Test User',
+                'first_name' => 'Test',
+                'last_name' => 'User',
                 'email' => 'Test@Example.com',
             ])
             ->assertSessionHasNoErrors();
@@ -77,7 +79,8 @@ class ProfileUpdateTest extends TestCase
             ->actingAs($user)
             ->from(route('profile.edit'))
             ->patch(route('profile.update'), [
-                'name' => 'Test User',
+                'first_name' => 'Test',
+                'last_name' => 'User',
                 'email' => 'Taken@Example.com',
             ]);
 
@@ -93,7 +96,8 @@ class ProfileUpdateTest extends TestCase
         $response = $this
             ->actingAs($user)
             ->patch(route('profile.update'), [
-                'name' => 'Test User',
+                'first_name' => 'Test',
+                'last_name' => 'User',
                 'email' => $user->email,
             ]);
 

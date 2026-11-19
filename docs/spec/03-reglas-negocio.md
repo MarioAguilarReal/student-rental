@@ -11,8 +11,9 @@ Reglas que el sistema **debe garantizar en el backend**, independientemente de l
     - Estudiante de intercambio: **credencial** de la institución destino **o carta de aceptación**, que debe indicar la fecha de fin de la estancia.
 - **RN-04** Vigencia de la verificación: estudiantes 6 meses, docentes 12 meses, intercambio hasta el fin de la estancia (máx. 12 meses). Al vencer pasa a `VENCIDO`: las rentas existentes continúan, pero no puede solicitar nuevas hasta renovar. Se avisa 15 días antes.
 - **RN-05** Se captura la **fecha de nacimiento** en el registro. La política para menores de edad está **pendiente** (D-21, B-19): por ahora no se restringe el registro.
-- **RN-06** El propietario debe estar `VERIFICADO` (identificación oficial + comprobante de propiedad o autorización para rentar) antes de **solicitar inspección** de una propiedad (D-20).
+- **RN-06** Antes de **solicitar la inspección** de una propiedad, el propietario debe tener su identidad `VERIFICADA` (identificación oficial, revisada por un administrador) **y** adjuntar a esa propiedad un comprobante de propiedad o una autorización del dueño para rentar (D-20, D-49).
 - **RN-07** Los documentos de verificación son **privados**. Solo los ven el usuario que los subió y los administradores, y únicamente mediante URLs firmadas temporales.
+- **RN-08** Nadie revisa su propia verificación: un administrador con perfil de cliente o propietario no puede aprobar ni rechazar su propia solicitud (conflicto de interés).
 
 ## Propiedades
 

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Identity\Enums;
 
+use App\Models\User;
 use App\Modules\Shared\Enums\Concerns\HasLabel;
 
 /**
@@ -25,6 +26,30 @@ enum Role: string
     public static function selfAssignable(): array
     {
         return [self::Client, self::Owner];
+    }
+
+    /**
+     * Roles the user holds, as enum values (uses the loaded roles relation).
+     *
+     * @return list<string>
+     */
+    public static function valuesOf(User $user): array
+    {
+        return array_values(array_map(
+            fn (self $role): string => $role->value,
+            array_filter(self::cases(), fn (self $role): bool => $user->hasRole($role->value)),
+        ));
+    }
+
+    /**
+     * @return list<string>
+     */
+    public static function labelsOf(User $user): array
+    {
+        return array_values(array_map(
+            fn (self $role): string => $role->label(),
+            array_filter(self::cases(), fn (self $role): bool => $user->hasRole($role->value)),
+        ));
     }
 
     /**

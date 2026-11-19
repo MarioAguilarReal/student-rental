@@ -36,19 +36,19 @@
 
 ### Glosario de código (ES → EN)
 
-| Especificación                  | Código                                                         | Especificación              | Código                                |
-| ------------------------------- | -------------------------------------------------------------- | --------------------------- | ------------------------------------- |
-| Propiedad                       | `Property`                                                     | Renta                       | `Rental`                              |
-| Unidad                          | `Unit`                                                         | Cargo                       | `Charge`                              |
-| Plan de renta                   | `RatePlan`                                                     | Intento de pago             | `PaymentAttempt`                      |
-| Bloqueo de disponibilidad       | `AvailabilityBlock`                                            | Asiento de ledger           | `LedgerEntry`                         |
-| Modalidad de gestión            | `management_mode`: `self_managed` \| `managed`                 | Regla de comisión           | `CommissionRule`                      |
-| Regla de género                 | `gender_policy`: `mixed` \| `women_only` \| `men_only`         | Inspección                  | `Inspection`                          |
-| Comunidades permitidas          | `allowed_communities`                                          | Respuesta de inspección     | `InspectionAnswer`                    |
-| Tipo de comunidad               | `community_type`: `faculty` \| `student` \| `exchange_student` | Plantilla de checklist      | `ChecklistTemplate` / `ChecklistItem` |
-| Perfil de cliente / propietario | `ClientProfile` / `OwnerProfile`                               | Documento de verificación   | `VerificationDocument`                |
-| Institución / Campus            | `Institution` / `Campus`                                       | Amenidad / Regla de la casa | `Amenity` / `HouseRule`               |
-| Tipos de unidad                 | `entire_place` \| `private_room` \| `shared_room` \| `bed`     | Periodos                    | `weekly` \| `monthly` \| `yearly`     |
+| Especificación            | Código                                                         | Especificación              | Código                                |
+| ------------------------- | -------------------------------------------------------------- | --------------------------- | ------------------------------------- |
+| Propiedad                 | `Property`                                                     | Renta                       | `Rental`                              |
+| Unidad                    | `Unit`                                                         | Cargo                       | `Charge`                              |
+| Plan de renta             | `RatePlan`                                                     | Intento de pago             | `PaymentAttempt`                      |
+| Bloqueo de disponibilidad | `AvailabilityBlock`                                            | Asiento de ledger           | `LedgerEntry`                         |
+| Modalidad de gestión      | `management_mode`: `self_managed` \| `managed`                 | Regla de comisión           | `CommissionRule`                      |
+| Regla de género           | `gender_policy`: `mixed` \| `women_only` \| `men_only`         | Inspección                  | `Inspection`                          |
+| Comunidades permitidas    | `allowed_communities`                                          | Respuesta de inspección     | `InspectionAnswer`                    |
+| Tipo de comunidad         | `community_type`: `faculty` \| `student` \| `exchange_student` | Plantilla de checklist      | `ChecklistTemplate` / `ChecklistItem` |
+| Perfil de verificación    | `VerificationProfile` (`kind`: `client` \| `owner`)            | Documento de verificación   | `VerificationDocument`                |
+| Institución / Campus      | `Institution` / `Campus`                                       | Amenidad / Regla de la casa | `Amenity` / `HouseRule`               |
+| Tipos de unidad           | `entire_place` \| `private_room` \| `shared_room` \| `bed`     | Periodos                    | `weekly` \| `monthly` \| `yearly`     |
 
 Los valores de estados y enums se guardan en inglés y _snake_case_. Sus etiquetas en español salen de `lang/es`.
 

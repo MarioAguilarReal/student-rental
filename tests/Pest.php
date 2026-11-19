@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\User;
+use App\Modules\Identity\Actions\AddAccountProfile;
+use App\Modules\Identity\Enums\Role;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -16,6 +20,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
+    ->beforeEach(fn () => $this->seed(RolesAndPermissionsSeeder::class))
     ->in('Feature');
 
 // Unit tests boot the framework (translator, config) but never touch the database.
@@ -44,4 +49,29 @@ function businessModules(): array
         'Notifications',
         'Audit',
     ];
+}
+
+/*
+|--------------------------------------------------------------------------
+| Users
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * A user with the given role. Client and owner roles also get their verification
+ * profile, exactly as sign-up does.
+ *
+ * @param  array<string, mixed>  $attributes
+ */
+function userWithRole(Role $role, array $attributes = []): User
+{
+    $user = User::factory()->create($attributes);
+
+    if (in_array($role, Role::selfAssignable(), true)) {
+        app(AddAccountProfile::class)->handle($user, $role);
+    } else {
+        $user->assignRole($role->value);
+    }
+
+    return $user->fresh() ?? $user;
 }

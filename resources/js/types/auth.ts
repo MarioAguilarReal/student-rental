@@ -1,5 +1,8 @@
 export type User = {
     id: number;
+    first_name: string;
+    last_name: string;
+    /** Full name, derived from first_name + last_name (D-48). */
     name: string;
     email: string;
     avatar?: string;
@@ -12,6 +15,8 @@ export type User = {
 
 export type Auth = {
     user: User;
+    roles: string[];
+    permissions: string[];
 };
 
 export type Passkey = {

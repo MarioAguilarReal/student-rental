@@ -8,7 +8,7 @@ Campos comunes en todas las entidades de negocio (se omiten en las tablas): `id`
 | Módulo                       | Entidades                                                                               | Publica eventos                                                                                            |
 | ---------------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | **Identidad y acceso**       | Usuario, Rol, Permiso                                                                   | `UsuarioRegistrado`, `RolAsignado`                                                                         |
-| **Verificación**             | PerfilCliente, PerfilPropietario, DocumentoVerificacion                                 | `UsuarioVerificado`, `VerificacionRechazada`, `VerificacionVencida`                                        |
+| **Verificación**             | PerfilVerificacion, DocumentoVerificacion                                               | `UsuarioVerificado`, `VerificacionRechazada`, `VerificacionVencida`                                        |
 | **Catálogos**                | Institucion, Campus, Amenidad, ReglaCasa, PlantillaChecklist, ItemChecklist             | —                                                                                                          |
 | **Propiedades**              | Propiedad, Unidad, FotoPropiedad, PropiedadAmenidad, UnidadAmenidad, PropiedadReglaCasa | `PropiedadEnviadaAInspeccion`, `PropiedadPublicada`, `CambioCriticoDetectado`                              |
 | **Precios y disponibilidad** | PlanRenta, BloqueoDisponibilidad                                                        | `PrecioCambiado`                                                                                           |
@@ -25,15 +25,14 @@ Regla de modularidad: un módulo **no accede directamente a las tablas de otro**
 
 ```mermaid
 erDiagram
-    USUARIO ||--o| PERFIL_CLIENTE : tiene
-    USUARIO ||--o| PERFIL_PROPIETARIO : tiene
+    USUARIO ||--o{ PERFIL_VERIFICACION : "tiene (cliente/propietario)"
     USUARIO }o--o{ ROL : posee
     ROL }o--o{ PERMISO : agrupa
-    USUARIO ||--o{ DOCUMENTO_VERIFICACION : sube
     INSTITUCION ||--o{ CAMPUS : tiene
-    INSTITUCION ||--o{ PERFIL_CLIENTE : pertenece
+    INSTITUCION ||--o{ PERFIL_VERIFICACION : pertenece
+    PERFIL_VERIFICACION ||--o{ DOCUMENTO_VERIFICACION : contiene
 
-    PERFIL_PROPIETARIO ||--o{ PROPIEDAD : posee
+    USUARIO ||--o{ PROPIEDAD : posee
     PROPIEDAD ||--o{ UNIDAD : contiene
     UNIDAD ||--o{ UNIDAD : "padre de"
     PROPIEDAD ||--o{ FOTO_PROPIEDAD : tiene
@@ -44,7 +43,7 @@ erDiagram
     UNIDAD ||--o{ PLAN_RENTA : tiene
     UNIDAD ||--o{ BLOQUEO_DISPONIBILIDAD : tiene
     UNIDAD ||--o{ RENTA : "se renta en"
-    PERFIL_CLIENTE ||--o{ RENTA : solicita
+    USUARIO ||--o{ RENTA : solicita
     RENTA ||--|{ CARGO : genera
     CARGO ||--o{ INTENTO_PAGO : tiene
     RENTA ||--o{ ASIENTO_LEDGER : registra
@@ -60,50 +59,48 @@ erDiagram
 
 ### Identidad y verificación
 
+> Implementado en la Iteración 1. Nombres en código: `User`, `VerificationProfile`, `VerificationDocument` (glosario en [07 §2](07-arquitectura.md)).
+
 **Usuario**
 
-| Campo               | Tipo        | Notas                                                           |
-| ------------------- | ----------- | --------------------------------------------------------------- |
-| email               | texto único | Correo de acceso                                                |
-| credencial_acceso   | —           | Hash de contraseña o proveedor externo (se define con el stack) |
-| nombre, apellidos   | texto       |                                                                 |
-| telefono            | texto       | Opcional                                                        |
-| fecha_nacimiento    | fecha       | Obligatoria. Política de menores pendiente (RN-05)              |
-| genero_convivencia  | enum?       | `MUJER` \| `HOMBRE` \| null. Opcional, privado (RN-32)          |
-| estado              | enum        | `ACTIVO` \| `SUSPENDIDO`                                        |
-| email_verificado_en | ts?         |                                                                 |
+| Campo                            | Tipo        | Notas                                                                            |
+| -------------------------------- | ----------- | -------------------------------------------------------------------------------- |
+| email                            | texto único | Correo de acceso                                                                 |
+| credencial_acceso                | —           | Hash de contraseña (Fortify)                                                     |
+| nombre, apellidos                | texto       | Campos separados (D-48); el nombre completo se deriva                            |
+| telefono                         | texto       | Opcional (pendiente)                                                             |
+| fecha_nacimiento                 | fecha       | Obligatoria. Política de menores pendiente (RN-05)                               |
+| genero_convivencia               | enum?       | `MUJER` \| `HOMBRE` \| null. Opcional, privado (RN-32). Se agrega con las rentas |
+| suspendido_en, motivo_suspension | ts?, texto? | HU-01.04. Una cuenta suspendida no puede iniciar sesión                          |
+| email_verificado_en              | ts?         |                                                                                  |
 
 **Rol / Permiso / UsuarioRol / RolPermiso**: RBAC estándar (ver [02](02-roles-permisos.md)).
 
-**PerfilCliente**
+**PerfilVerificacion** (uno por usuario y tipo, D-47)
 
-| Campo               | Tipo   | Notas                                                 |
-| ------------------- | ------ | ----------------------------------------------------- |
-| usuario_id          | id     | 1:1                                                   |
-| tipo_comunidad      | enum   | `DOCENTE` \| `ESTUDIANTE` \| `ESTUDIANTE_INTERCAMBIO` |
-| institucion_id      | id     | Institución destino                                   |
-| estado_verificacion | enum   | Ver máquina de estados                                |
-| verificado_hasta    | fecha? | RN-04                                                 |
-
-**PerfilPropietario**
-
-| Campo               | Tipo  | Notas                           |
-| ------------------- | ----- | ------------------------------- |
-| usuario_id          | id    | 1:1                             |
-| estado_verificacion | enum  | Mismo ciclo que el cliente      |
-| datos_fiscales      | json? | RFC u otros. Opcional en el MVP |
+| Campo                                     | Tipo   | Notas                                                               |
+| ----------------------------------------- | ------ | ------------------------------------------------------------------- |
+| usuario_id                                | id     | Único junto con `tipo`                                              |
+| tipo                                      | enum   | `CLIENTE` \| `PROPIETARIO`                                          |
+| estado                                    | enum   | Ver máquina de estados                                              |
+| tipo_comunidad                            | enum?  | Solo cliente: `DOCENTE` \| `ESTUDIANTE` \| `ESTUDIANTE_INTERCAMBIO` |
+| institucion_id                            | id?    | Solo cliente: institución destino (RN-02)                           |
+| fin_estancia                              | fecha? | Solo intercambio con carta de aceptación (RN-03)                    |
+| enviado_en                                | ts?    | Orden de la bandeja de revisión                                     |
+| revisado_por, revisado_en, motivo_rechazo |        |                                                                     |
+| verificado_hasta                          | fecha? | RN-04. Null para propietarios (no vencen)                           |
+| aviso_vencimiento_enviado_en              | ts?    | Evita repetir el aviso de 15 días                                   |
 
 **DocumentoVerificacion**
 
-| Campo                                     | Tipo   | Notas                                                                                     |
-| ----------------------------------------- | ------ | ----------------------------------------------------------------------------------------- |
-| usuario_id                                | id     |                                                                                           |
-| tipo                                      | enum   | `CREDENCIAL` \| `CARTA_ACEPTACION` \| `IDENTIFICACION_OFICIAL` \| `COMPROBANTE_PROPIEDAD` |
-| archivo_id                                | id     | Archivo **privado**                                                                       |
-| propiedad_id                              | id?    | Solo para `COMPROBANTE_PROPIEDAD`                                                         |
-| estado                                    | enum   | `PENDIENTE` \| `APROBADO` \| `RECHAZADO`                                                  |
-| vigente_hasta                             | fecha? | Por ejemplo, el fin de estancia en la carta                                               |
-| revisado_por, revisado_en, motivo_rechazo |        |                                                                                           |
+| Campo                                           | Tipo | Notas                                                                     |
+| ----------------------------------------------- | ---- | ------------------------------------------------------------------------- |
+| perfil_verificacion_id                          | id   |                                                                           |
+| tipo                                            | enum | `CREDENCIAL` \| `CARTA_ACEPTACION` \| `IDENTIFICACION_OFICIAL`            |
+| estado                                          | enum | `PENDIENTE` \| `APROBADO` \| `RECHAZADO` (sigue a la decisión del perfil) |
+| disco, ruta, nombre_original, tipo_mime, tamaño |      | Disco **privado** (RN-07)                                                 |
+
+El **comprobante de propiedad** no es parte de la verificación de identidad: se adjunta a cada propiedad en la Iteración 2 (D-49).
 
 ### Catálogos
 

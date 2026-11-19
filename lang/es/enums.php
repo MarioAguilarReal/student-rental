@@ -48,4 +48,36 @@ return [
         'audit.view' => 'Ver bitácora',
     ],
 
+    'VerificationKind' => [
+        'client' => 'cliente',
+        'owner' => 'propietario',
+    ],
+
+    'VerificationStatus' => [
+        'unverified' => 'Correo sin confirmar',
+        'email_verified' => 'Pendiente de documentos',
+        'in_review' => 'En revisión',
+        'verified' => 'Verificado',
+        'rejected' => 'Rechazado',
+        'expired' => 'Vencido',
+    ],
+
+    'CommunityType' => [
+        'faculty' => 'Docente',
+        'student' => 'Estudiante',
+        'exchange_student' => 'Estudiante de intercambio',
+    ],
+
+    'DocumentType' => [
+        'credential' => 'Credencial institucional',
+        'acceptance_letter' => 'Carta de aceptación',
+        'official_id' => 'Identificación oficial',
+    ],
+
+    'DocumentStatus' => [
+        'pending' => 'Pendiente',
+        'approved' => 'Aprobado',
+        'rejected' => 'Rechazado',
+    ],
+
 ];

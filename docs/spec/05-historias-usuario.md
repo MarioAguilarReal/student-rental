@@ -76,9 +76,9 @@ Formato: **Como** [rol] **quiero** [acción] **para** [beneficio]. Los criterios
 
 ### HU-02.03 Verificación de propietario · Must
 
-**Como** propietario **quiero** subir mi identificación oficial y el comprobante de propiedad **para** poder enviar mis propiedades a inspección.
+**Como** propietario **quiero** subir mi identificación oficial **para** que mi identidad quede verificada.
 
-- El comprobante se asocia a una propiedad específica.
+- El comprobante de propiedad se adjunta a cada propiedad al solicitar su inspección (Iteración 2, D-49).
 - Sin verificación aprobada, el botón "Solicitar inspección" está deshabilitado con una explicación (RN-06).
 
 ### HU-02.04 Revisar documentos · Must

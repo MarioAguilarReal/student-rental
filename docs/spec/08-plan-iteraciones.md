@@ -25,3 +25,13 @@ No hay fecha objetivo, así que se avanza por **iteraciones verticales**: cada u
 7. Traducción base al español (`lang/es`), incluidas las pantallas de autenticación del starter kit.
 8. `CLAUDE.md` generado por Laravel Boost a partir de `.ai/guidelines/project.md` (convenciones, comandos y definición de terminado).
 9. Verificación completa con `composer ci:check` (ya la trae el starter kit): Pint, PHPStan nivel 7, Pest, `vp check` y `tsc`.
+
+## Iteración 1 — ✅ completada (2026-11-19)
+
+Historias: HU-01.01 a HU-01.04, HU-02.01 a HU-02.05 y HU-03.01 (también HU-01.04, que era _Should_).
+
+- **Identity:** registro como cliente o propietario con fecha de nacimiento; agregar el otro perfil; roles internos (solo Super Admin); suspensión con motivo, cierre de sesiones y bloqueo de inicio de sesión.
+- **Verification:** perfil por tipo, asociación automática de institución por dominio de correo (incluye subdominios), envío de documentos privados, bandeja de revisión (más antiguas primero), aprobación con vigencia según RN-04, rechazo con motivo, avisos y vencimiento diarios.
+- **Catalog:** instituciones con dominios de correo únicos y campus con coordenadas.
+- **Notifications / Audit:** correo + notificación en la base de datos para cada decisión; bitácora de verificaciones, roles y suspensiones.
+- Pendiente de interfaz: el centro de notificaciones (HU-10.02, iteración 8) — las notificaciones ya se guardan.

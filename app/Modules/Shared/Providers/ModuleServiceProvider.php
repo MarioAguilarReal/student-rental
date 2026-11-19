@@ -22,7 +22,7 @@ abstract class ModuleServiceProvider extends ServiceProvider
     protected array $policies = [];
 
     /**
-     * @var array<class-string, list<class-string>> event => listeners
+     * @var array<class-string, list<class-string|array{class-string, string}>> event => listeners (class or [class, method])
      */
     protected array $listen = [];
 
