@@ -1,0 +1,27 @@
+# 08 · Plan de iteraciones
+
+No hay fecha objetivo, así que se avanza por **iteraciones verticales**: cada una deja funcionalidad usable de punta a punta (base de datos → lógica → interfaz → pruebas). Las notificaciones y la auditoría de cada flujo se construyen **dentro** de la iteración que crea ese flujo, no al final.
+
+| #   | Iteración                    | Épicas / historias                                                | Resultado demostrable                                                                                                                                            |
+| --- | ---------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0   | **Cimientos**                | —                                                                 | Proyecto Laravel + React funcionando sobre PostgreSQL, módulos vacíos, roles y permisos, pruebas de arquitectura, `CLAUDE.md`, seeders base, interfaz en español |
+| 1   | **Identidad y verificación** | E01, E02, HU-03.01                                                | Registro de cliente y propietario, verificación por correo y documentos, bandeja de revisión del administrador, vencimientos                                     |
+| 2   | **Propiedades y unidades**   | E04, HU-03.02                                                     | Alta de propiedades con árbol de unidades, fotos, amenidades, reglas de la casa y convivencia, gestión del administrador                                         |
+| 3   | **Precios y disponibilidad** | E05, HU-03.04 (lectura de comisión para la vista previa del neto) | Planes con precios sugeridos, depósito, bloqueos, vista previa del ingreso neto                                                                                  |
+| 4   | **Inspecciones**             | E06, HU-03.03                                                     | Checklist versionado, asignación, ejecución desde el celular, dictamen, publicación con todos los requisitos (RN-10)                                             |
+| 5   | **Búsqueda**                 | E07                                                               | Catálogo público con filtros, mapa aproximado y detalle con calendario                                                                                           |
+| 6   | **Rentas**                   | E08                                                               | Solicitud, aprobación con control de concurrencia, expiraciones, ciclo automático, cancelación administrativa                                                    |
+| 7   | **Pagos simulados**          | E09, HU-03.04 (gestión)                                           | Calendario de cargos, pago de prueba, ledger, saldo del propietario, panel financiero                                                                            |
+| 8   | **Cierre del MVP**           | E10 (resto), E11, HU-01.04, HU-03.05                              | Centro de notificaciones, bitácora consultable, parámetros configurables, revisión general de seguridad                                                          |
+
+## Iteración 0, en detalle — ✅ completada (2026-11-18)
+
+1. `git init` + crear el proyecto con el **starter kit de React** de Laravel (TypeScript, Inertia, Tailwind, shadcn/ui).
+2. Configurar PostgreSQL (`pgsql`), habilitar `btree_gist`, zona horaria UTC y locale `es`.
+3. Instalar `spatie/laravel-permission`, `spatie/laravel-medialibrary`, `spatie/laravel-activitylog`, `brick/money`, `larastan/larastan` y **Pest** (si el starter kit no lo trae).
+4. Crear la estructura `app/Modules/*` con un ServiceProvider por módulo y el módulo `Shared` (Money y clases base de Action y de excepción de dominio).
+5. Escribir las pruebas de arquitectura (`tests/Arch`) que hacen cumplir las reglas de la sección 4 de [07-arquitectura](07-arquitectura.md).
+6. Seeder de roles y permisos ([02](02-roles-permisos.md)) + un usuario por rol para desarrollo.
+7. Traducción base al español (`lang/es`), incluidas las pantallas de autenticación del starter kit.
+8. `CLAUDE.md` generado por Laravel Boost a partir de `.ai/guidelines/project.md` (convenciones, comandos y definición de terminado).
+9. Verificación completa con `composer ci:check` (ya la trae el starter kit): Pint, PHPStan nivel 7, Pest, `vp check` y `tsc`.

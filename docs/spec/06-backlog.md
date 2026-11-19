@@ -1,0 +1,26 @@
+# 06 · Backlog futuro (fuera del MVP)
+
+Funcionalidades identificadas y diferidas a propósito. El modelo del MVP ya deja preparado lo necesario para cada una, como se indica en la columna "Preparación en el MVP".
+
+| #    | Funcionalidad                                                                | Preparación en el MVP                             | Notas                                                                                     |
+| ---- | ---------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| B-01 | **Política de cancelación** (plazos, penalizaciones, reembolsos automáticos) | Estado `CANCELADA`, ledger con asientos de ajuste | TODO acordado (D-06)                                                                      |
+| B-02 | **Pasarela de pago real** (Stripe, Mercado Pago, Conekta…)                   | Interfaz `PasarelaPago` + ledger real             | Requiere revisión fiscal (facturación CFDI si opera en México)                            |
+| B-03 | **Pagos a propietarios** (payouts) y conciliación                            | Cuenta `PROPIETARIO_POR_PAGAR`                    |                                                                                           |
+| B-04 | **Devolución del depósito** ligada a la inspección de salida                 | Cuenta `DEPOSITOS_EN_GARANTIA`                    |                                                                                           |
+| B-05 | **Inspecciones de entrada y salida** del inquilino                           | Tipos de inspección extensibles                   | Base para B-04                                                                            |
+| B-06 | **Modo sin conexión** para inspectores (PWA o app móvil)                     | API primero                                       |                                                                                           |
+| B-07 | **Mensajería** cliente ↔ operador                                            | Eventos de dominio                                |                                                                                           |
+| B-08 | **Reseñas y calificaciones** (inquilino ↔ propiedad)                         | Renta `FINALIZADA`                                | Solo después de una renta finalizada                                                      |
+| B-09 | **Contratos digitales** y firma electrónica                                  | Valores comerciales copiados en la renta          |                                                                                           |
+| B-10 | **Precios por temporada**, descuentos y cupones                              | `PlanRenta` extensible                            |                                                                                           |
+| B-11 | **Penalizaciones por pago tardío**                                           | Estado `VENCIDO` en cargos                        |                                                                                           |
+| B-12 | **Tickets de mantenimiento** durante la renta                                |                                                   |                                                                                           |
+| B-13 | **Multi-tenancy** (espacio por institución)                                  | Catálogo `Institucion`                            | D-02                                                                                      |
+| B-14 | **App móvil nativa**                                                         | API primero                                       |                                                                                           |
+| B-15 | **Reportes / BI** (ocupación, ingresos por zona)                             | Ledger + auditoría                                |                                                                                           |
+| B-16 | **Lista de espera** para unidades ocupadas                                   |                                                   |                                                                                           |
+| B-17 | **Búsqueda de roomies** / compatibilidad en espacios compartidos             | Reglas de convivencia                             |                                                                                           |
+| B-18 | **Renovación o extensión** de una renta activa                               |                                                   |                                                                                           |
+| B-19 | **Política para menores de edad** (tutor, consentimiento, contrato)          | `Usuario.fecha_nacimiento`                        | D-21 · Negocio definirá la solución. **Conviene resolverla antes de salir a producción.** |
+| B-20 | **Autenticación con SSO institucional**                                      | Módulo de identidad desacoplado                   | Reemplazaría la verificación por credencial                                               |
