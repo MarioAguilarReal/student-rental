@@ -4,6 +4,7 @@ namespace App\Modules\Properties\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Modules\Inspections\Presenters\InspectionPresenter;
 use App\Modules\Pricing\Presenters\PricingPresenter;
 use App\Modules\Properties\Actions\CreateProperty;
 use App\Modules\Properties\Actions\UpdatePropertyDetails;
@@ -84,7 +85,7 @@ class PropertyController extends Controller
         return to_route('properties.edit', $property);
     }
 
-    public function edit(Request $request, Property $property, PricingPresenter $pricingPresenter): Response
+    public function edit(Request $request, Property $property, PricingPresenter $pricingPresenter, InspectionPresenter $inspectionPresenter): Response
     {
         /** @var User $user */
         $user = $request->user();
@@ -92,6 +93,7 @@ class PropertyController extends Controller
         return Inertia::render('properties/edit', [
             ...$this->presenter->forEditing($property, $user),
             'pricing' => $pricingPresenter->forProperty($property),
+            'inspection' => $inspectionPresenter->latestForProperty($property),
         ]);
     }
 

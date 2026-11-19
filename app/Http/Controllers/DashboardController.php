@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Modules\Identity\Enums\Permission;
+use App\Modules\Inspections\Enums\InspectionStatus;
+use App\Modules\Inspections\Models\Inspection;
 use App\Modules\Properties\Enums\PropertyStatus;
 use App\Modules\Properties\Models\Property;
 use App\Modules\Properties\Presenters\PropertyPresenter;
@@ -40,6 +42,12 @@ class DashboardController extends Controller
                 'needs_action' => $profile->status->acceptsSubmissions(),
             ]),
             'properties' => $ownsProperties ? $properties->map(fn (Property $property): array => $propertyPresenter->summary($property)) : null,
+            'inspectionsToAssign' => $user->can(Permission::InspectionsAssign->value)
+                ? Inspection::query()->where('status', InspectionStatus::PendingAssignment)->count()
+                : null,
+            'upcomingInspections' => $user->can(Permission::InspectionsPerform->value)
+                ? Inspection::query()->where('inspector_id', $user->id)->whereIn('status', [InspectionStatus::Assigned, InspectionStatus::InProgress])->count()
+                : null,
             'pendingReviews' => $user->can(Permission::VerificationDocumentsReview->value)
                 ? VerificationProfile::query()->where('status', VerificationStatus::InReview)->count()
                 : null,

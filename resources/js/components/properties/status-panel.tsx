@@ -2,13 +2,18 @@ import { Form } from '@inertiajs/react';
 import { ExternalLink, FileText } from 'lucide-react';
 import FileField from '@/components/file-field';
 import InputError from '@/components/input-error';
+import OwnerInspectionCard from '@/components/inspections/owner-inspection-card';
 import ProgressSteps from '@/components/progress-steps';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/lib/i18n';
 import { archive, pause, publish } from '@/routes/properties';
 import { request as requestInspection } from '@/routes/properties/inspection';
 import { store as storeProof } from '@/routes/properties/ownership-proof';
-import type { PropertyDetail, PublicationRequirement } from '@/types';
+import type {
+    OwnerInspection,
+    PropertyDetail,
+    PublicationRequirement,
+} from '@/types';
 
 type Can = {
     update: boolean;
@@ -70,11 +75,13 @@ export default function StatusPanel({
     publication,
     ownershipProof,
     can,
+    inspection,
 }: {
     property: PropertyDetail;
     publication: PublicationRequirement[];
     ownershipProof: Proof;
     can: Can;
+    inspection: OwnerInspection | null;
 }) {
     const { t } = useTranslation();
     const canArchive =
@@ -89,6 +96,8 @@ export default function StatusPanel({
                     {t(statusHelp[property.status])}
                 </p>
             </header>
+
+            {inspection && <OwnerInspectionCard inspection={inspection} />}
 
             <ProgressSteps title={t('Before publishing')} steps={publication} />
             {property.inspection_valid_until && (

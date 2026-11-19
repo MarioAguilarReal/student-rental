@@ -54,3 +54,14 @@ Historias: HU-05.01 a HU-05.03 y HU-03.04 (lectura de la comisión).
 - **Publicación:** `RatePlanCatalog` ya responde con los planes reales; solo falta la inspección aprobada (Iteración 4) para poder publicar.
 - **Interfaz:** sección "Precios y disponibilidad" en el editor, con lo que recibe el propietario después de la comisión, sugerencias de un clic y bloqueos.
 - **Pendiente para la Iteración 6:** los bloqueos y los cambios de espacios revisarán rentas bloqueantes.
+
+## Iteración 4 — ✅ completada (2026-11-20)
+
+Historias: HU-03.03 y HU-06.01 a HU-06.06.
+
+- **Checklist versionado** (super administrador): la versión vigente es de solo lectura; los cambios se hacen en un borrador que se publica como versión nueva (RN-82). Checklist inicial de 14 ítems de seguridad y fidelidad, 8 críticos.
+- **Ciclo:** la solicitud de inspección (o un cambio crítico) abre la inspección; el administrador asigna inspector y fecha (RN-81); el inspector la ejecuta en el celular, ítem por ítem, con fotos (RN-84, RN-87); el dictamen actualiza la propiedad: aprobada con vigencia de 12 meses o rechazada (RN-83).
+- **El propietario** ve en su editor la fecha, el inspector y, al terminar, el dictamen, las observaciones y lo que no cumplió con su evidencia.
+- **Diario:** renovación 30 días antes y pausa al vencer (RN-85).
+- **Notificaciones** (correo + base de datos) y **auditoría** de asignaciones, dictámenes y versiones del checklist.
+- **Ya se puede publicar** de punta a punta: verificación → comprobante → precios → inspección aprobada → 3 fotos → publicar.

@@ -27,8 +27,9 @@ enum PropertyStatus: string
             self::PendingInspection => [self::Approved, self::Rejected],
             self::Rejected => [self::PendingInspection, self::Archived],
             self::Approved => [self::Published, self::PendingInspection, self::Archived],
-            self::Published => [self::Paused, self::PendingInspection],
-            self::Paused => [self::Published, self::PendingInspection, self::Archived],
+            // Rejected from Published/Paused: a renewal inspection failed (RN-85).
+            self::Published => [self::Paused, self::PendingInspection, self::Rejected],
+            self::Paused => [self::Published, self::PendingInspection, self::Archived, self::Rejected],
             self::Archived => [],
         };
     }

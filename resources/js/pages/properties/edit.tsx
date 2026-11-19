@@ -17,6 +17,7 @@ import { useTranslation } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { index } from '@/routes/properties';
 import type {
+    OwnerInspection,
     PricingData,
     PropertyDetail,
     PropertyEditorOptions,
@@ -43,6 +44,7 @@ type Props = {
     };
     options: PropertyEditorOptions;
     pricing: PricingData;
+    inspection: OwnerInspection | null;
 };
 
 const SECTIONS = [
@@ -77,6 +79,7 @@ export default function PropertyEdit({
     can,
     options,
     pricing,
+    inspection,
 }: Props) {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
@@ -198,6 +201,7 @@ export default function PropertyEdit({
                 publication={publication}
                 ownershipProof={ownershipProof}
                 can={can}
+                inspection={inspection}
             />
         ),
         details: (

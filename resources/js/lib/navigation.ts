@@ -1,6 +1,9 @@
 import {
     BadgeCheck,
     Building2,
+    CalendarDays,
+    ClipboardList,
+    ListTodo,
     Home,
     ListChecks,
     Sofa,
@@ -13,6 +16,9 @@ import { dashboard } from '@/routes';
 import { index as amenitiesIndex } from '@/routes/catalog/amenities';
 import { index as houseRulesIndex } from '@/routes/catalog/house-rules';
 import { index as institutionsIndex } from '@/routes/catalog/institutions';
+import { index as checklistsIndex } from '@/routes/checklists';
+import { agenda as inspectionAgenda } from '@/routes/inspections';
+import { index as inspectionQueue } from '@/routes/inspections/queue';
 import { index as myProperties } from '@/routes/properties';
 import { index as allProperties } from '@/routes/properties/admin';
 import { index as usersIndex } from '@/routes/users';
@@ -36,6 +42,12 @@ const mainItems: GuardedNavItem[] = [
         icon: Home,
         permissions: ['properties.create'],
     },
+    {
+        title: 'My inspections',
+        href: inspectionAgenda(),
+        icon: CalendarDays,
+        permissions: ['inspections.perform'],
+    },
 ];
 
 const adminItems: GuardedNavItem[] = [
@@ -44,6 +56,12 @@ const adminItems: GuardedNavItem[] = [
         href: allProperties(),
         icon: Home,
         permissions: ['properties.view_any'],
+    },
+    {
+        title: 'Inspections',
+        href: inspectionQueue(),
+        icon: ClipboardList,
+        permissions: ['inspections.assign'],
     },
     {
         title: 'Verifications',
@@ -73,6 +91,12 @@ const adminItems: GuardedNavItem[] = [
         title: 'House rules',
         href: houseRulesIndex(),
         icon: ListChecks,
+        permissions: ['catalog.manage'],
+    },
+    {
+        title: 'Inspection checklist',
+        href: checklistsIndex(),
+        icon: ListTodo,
         permissions: ['catalog.manage'],
     },
 ];

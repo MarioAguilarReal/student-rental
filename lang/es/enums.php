@@ -113,4 +113,24 @@ return [
 
     'BlockReason' => ['maintenance' => 'Mantenimiento', 'owner_use' => 'Uso del propietario', 'other' => 'Otro'],
 
+    'ChecklistStatus' => ['draft' => 'Borrador', 'published' => 'Publicada', 'retired' => 'Retirada'],
+
+    'ChecklistCategory' => [
+        'electrical' => 'Eléctrico', 'gas' => 'Gas', 'fire_safety' => 'Incendio', 'security' => 'Seguridad',
+        'structure' => 'Estructura', 'hygiene' => 'Higiene', 'listing' => 'Publicación',
+    ],
+
+    'ItemScope' => ['property' => 'Áreas comunes', 'unit' => 'Cada espacio rentable'],
+
+    'InspectionType' => ['initial' => 'Inspección inicial', 'change' => 'Por cambio', 'renewal' => 'Renovación'],
+
+    'InspectionStatus' => [
+        'pending_assignment' => 'Por asignar', 'assigned' => 'Asignada', 'in_progress' => 'En curso',
+        'completed' => 'Terminada', 'cancelled' => 'Cancelada',
+    ],
+
+    'InspectionResult' => ['approved' => 'Aprobada', 'approved_with_observations' => 'Aprobada con observaciones', 'rejected' => 'Rechazada'],
+
+    'AnswerResult' => ['compliant' => 'Cumple', 'non_compliant' => 'No cumple', 'not_applicable' => 'No aplica'],
+
 ];

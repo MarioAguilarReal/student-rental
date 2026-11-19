@@ -5,6 +5,9 @@ namespace App\Modules\Audit\Listeners;
 use App\Modules\Identity\Events\InternalRolesChanged;
 use App\Modules\Identity\Events\UserReactivated;
 use App\Modules\Identity\Events\UserSuspended;
+use App\Modules\Inspections\Events\ChecklistPublished;
+use App\Modules\Inspections\Events\InspectionAssigned;
+use App\Modules\Inspections\Events\InspectionCompleted;
 use App\Modules\Pricing\Events\UnitPricingUpdated;
 use App\Modules\Properties\Events\PropertyArchived;
 use App\Modules\Properties\Events\PropertyPaused;
@@ -95,5 +98,26 @@ class RecordAuditTrail
         activity('pricing')->performedOn($event->unit)->causedBy($event->actor)
             ->event('pricing_updated')->withProperties(['before' => $event->before, 'after' => $event->after])
             ->log('Prices updated');
+    }
+
+    public function inspectionAssigned(InspectionAssigned $event): void
+    {
+        activity('inspection')->performedOn($event->inspection)->causedBy($event->actor)->event('assigned')
+            ->withProperties(['inspector_id' => $event->inspection->inspector_id, 'scheduled_for' => $event->inspection->scheduled_for?->toDateString()])
+            ->log('Inspection assigned');
+    }
+
+    public function inspectionCompleted(InspectionCompleted $event): void
+    {
+        activity('inspection')->performedOn($event->inspection)->causedBy($event->inspection->inspector)->event('completed')
+            ->withProperties(['result' => $event->inspection->result?->value, 'property_id' => $event->inspection->property_id])
+            ->log('Inspection completed');
+    }
+
+    public function checklistPublished(ChecklistPublished $event): void
+    {
+        activity('inspection')->performedOn($event->template)->causedBy($event->actor)->event('checklist_published')
+            ->withProperties(['version' => $event->template->version])
+            ->log('Checklist published');
     }
 }

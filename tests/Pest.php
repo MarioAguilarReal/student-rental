@@ -3,6 +3,14 @@
 use App\Models\User;
 use App\Modules\Identity\Actions\AddAccountProfile;
 use App\Modules\Identity\Enums\Role;
+use App\Modules\Inspections\Actions\OpenInspection;
+use App\Modules\Inspections\Enums\InspectionType;
+use App\Modules\Inspections\Models\Inspection;
+use App\Modules\Properties\Enums\PropertyStatus;
+use App\Modules\Properties\Enums\UnitType;
+use App\Modules\Properties\Models\Property;
+use App\Modules\Properties\Models\Unit;
+use Database\Seeders\ChecklistSeeder;
 use Database\Seeders\CommissionRulesSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,7 +29,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->beforeEach(fn () => $this->seed([RolesAndPermissionsSeeder::class, CommissionRulesSeeder::class]))
+    ->beforeEach(fn () => $this->seed([RolesAndPermissionsSeeder::class, CommissionRulesSeeder::class, ChecklistSeeder::class]))
     ->in('Feature');
 
 // Unit tests boot the framework (translator, config) but never touch the database.
@@ -86,4 +94,19 @@ function verifiedOwner(array $attributes = []): User
     $owner->verificationProfiles()->update(['status' => 'verified', 'reviewed_at' => now()]);
 
     return $owner->fresh() ?? $owner;
+}
+
+/**
+ * A property with an address, two rentable spaces (house + room) and an open inspection.
+ */
+function propertyAwaitingInspection(): Inspection
+{
+    $owner = verifiedOwner();
+    $property = Property::factory()->withAddress()
+        ->status(PropertyStatus::PendingInspection)
+        ->create(['owner_id' => $owner->id]);
+    $house = Unit::factory()->create(['property_id' => $property->id]);
+    Unit::factory()->childOf($house, UnitType::PrivateRoom)->create();
+
+    return app(OpenInspection::class)->handle($property, InspectionType::Initial);
 }

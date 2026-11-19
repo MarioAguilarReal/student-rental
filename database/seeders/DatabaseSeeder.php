@@ -14,14 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([RolesAndPermissionsSeeder::class, CatalogDefaultsSeeder::class, CommissionRulesSeeder::class]);
+        $this->call([RolesAndPermissionsSeeder::class, CatalogDefaultsSeeder::class, CommissionRulesSeeder::class, ChecklistSeeder::class]);
 
         if (app()->environment(['local', 'testing'])) {
             $this->call([DevelopmentCatalogSeeder::class, DevelopmentUsersSeeder::class]);
         }
 
         if (app()->environment('local')) {
-            $this->call([DevelopmentVerificationSeeder::class, DevelopmentPropertySeeder::class]);
+            $this->call([DevelopmentVerificationSeeder::class, DevelopmentPropertySeeder::class, DevelopmentInspectionSeeder::class]);
         }
     }
 }

@@ -2,6 +2,8 @@ import { Head, Link } from '@inertiajs/react';
 import {
     ArrowRight,
     BadgeCheck,
+    CalendarDays,
+    ClipboardList,
     ClipboardCheck,
     Home,
     Plus,
@@ -19,6 +21,8 @@ import {
     edit as editProperty,
     index as myProperties,
 } from '@/routes/properties';
+import { agenda as inspectionAgenda } from '@/routes/inspections';
+import { index as inspectionQueue } from '@/routes/inspections/queue';
 import { show as verification } from '@/routes/verifications';
 import { index as reviews } from '@/routes/verifications/reviews';
 import type { PropertySummary, VerificationStatus } from '@/types';
@@ -36,6 +40,8 @@ type Props = {
     }[];
     properties: PropertySummary[] | null;
     pendingReviews: number | null;
+    inspectionsToAssign: number | null;
+    upcomingInspections: number | null;
 };
 
 type Task = {
@@ -52,6 +58,8 @@ export default function Dashboard({
     verifications,
     properties,
     pendingReviews,
+    inspectionsToAssign,
+    upcomingInspections,
 }: Props) {
     const { t } = useTranslation();
 
@@ -92,6 +100,34 @@ export default function Dashboard({
                 href: editProperty(property.id),
                 action: t('Continue'),
             })),
+        ...(upcomingInspections
+            ? [
+                  {
+                      key: 'agenda',
+                      icon: CalendarDays,
+                      title: t(':count inspections scheduled', {
+                          count: upcomingInspections,
+                      }),
+                      detail: t('The next one first.'),
+                      href: inspectionAgenda(),
+                      action: t('Open agenda'),
+                  },
+              ]
+            : []),
+        ...(inspectionsToAssign
+            ? [
+                  {
+                      key: 'assign',
+                      icon: ClipboardList,
+                      title: t(':count inspections to assign', {
+                          count: inspectionsToAssign,
+                      }),
+                      detail: t('Choose an inspector and a date.'),
+                      href: inspectionQueue(),
+                      action: t('Assign'),
+                  },
+              ]
+            : []),
         ...(pendingReviews
             ? [
                   {
