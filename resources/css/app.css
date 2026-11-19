@@ -206,3 +206,10 @@
         }
     }
 }
+
+/* Leaflet maps use the product face; its zoom buttons default to 'Lucida Console', monospace. */
+.leaflet-container,
+.leaflet-container .leaflet-control-zoom-in,
+.leaflet-container .leaflet-control-zoom-out {
+    font-family: inherit;
+}

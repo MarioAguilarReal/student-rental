@@ -6,6 +6,8 @@ use App\Modules\Identity\Enums\Role;
 use App\Modules\Inspections\Actions\OpenInspection;
 use App\Modules\Inspections\Enums\InspectionType;
 use App\Modules\Inspections\Models\Inspection;
+use App\Modules\Pricing\Enums\RatePeriod;
+use App\Modules\Pricing\Models\RatePlan;
 use App\Modules\Properties\Enums\PropertyStatus;
 use App\Modules\Properties\Enums\UnitType;
 use App\Modules\Properties\Models\Property;
@@ -57,6 +59,7 @@ function businessModules(): array
         'Inspections',
         'Notifications',
         'Audit',
+        'Search',
     ];
 }
 
@@ -109,4 +112,31 @@ function propertyAwaitingInspection(): Inspection
     Unit::factory()->childOf($house, UnitType::PrivateRoom)->create();
 
     return app(OpenInspection::class)->handle($property, InspectionType::Initial);
+}
+
+/**
+ * A published, inspected property near (32.53, -117.02) with one rentable space and a monthly plan.
+ *
+ * @param  array<string, mixed>  $attributes
+ * @param  array<string, mixed>  $unit
+ */
+function listedProperty(array $attributes = [], array $unit = [], int $monthlyMinor = 450_000): Property
+{
+    $property = Property::factory()->inspected()->create([
+        'status' => PropertyStatus::Published,
+        'published_at' => now(),
+        'latitude' => 32.5300,
+        'longitude' => -117.0200,
+        ...$attributes,
+    ]);
+    $space = Unit::factory()->create(['property_id' => $property->id, ...$unit]);
+    RatePlan::create([
+        'unit_id' => $space->id,
+        'period' => RatePeriod::Monthly,
+        'price_minor' => $monthlyMinor,
+        'min_periods' => 1,
+        'max_periods' => 12,
+    ]);
+
+    return $property;
 }

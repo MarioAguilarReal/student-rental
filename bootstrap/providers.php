@@ -9,6 +9,7 @@ use App\Modules\Payments\PaymentsServiceProvider;
 use App\Modules\Pricing\PricingServiceProvider;
 use App\Modules\Properties\PropertiesServiceProvider;
 use App\Modules\Rentals\RentalsServiceProvider;
+use App\Modules\Search\SearchServiceProvider;
 use App\Modules\Verification\VerificationServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\FortifyServiceProvider;
@@ -28,4 +29,5 @@ return [
     InspectionsServiceProvider::class,
     NotificationsServiceProvider::class,
     AuditServiceProvider::class,
+    SearchServiceProvider::class,
 ];

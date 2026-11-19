@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         }
 
         if (app()->environment('local')) {
-            $this->call([DevelopmentVerificationSeeder::class, DevelopmentPropertySeeder::class, DevelopmentInspectionSeeder::class]);
+            $this->call([DevelopmentVerificationSeeder::class, DevelopmentPropertySeeder::class, DevelopmentInspectionSeeder::class, DevelopmentListingsSeeder::class]);
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Page from '@/components/page';
@@ -16,6 +16,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useTranslation } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { index } from '@/routes/properties';
+import { show as stayShow } from '@/routes/stays';
+import { Button } from '@/components/ui/button';
 import type {
     OwnerInspection,
     PricingData,
@@ -263,7 +265,16 @@ export default function PropertyEdit({
                     name: property.owner,
                     email: property.owner_email,
                 })}
-                actions={<NextStepAction property={property} can={can} />}
+                actions={
+                    <>
+                        <Button asChild variant="outline">
+                            <Link href={stayShow(property.id)}>
+                                {t('View listing')}
+                            </Link>
+                        </Button>
+                        <NextStepAction property={property} can={can} />
+                    </>
+                }
             >
                 {readOnly && property.editable && (
                     <p className="mb-6 rounded-xl bg-muted px-4 py-3 text-sm">
@@ -272,7 +283,7 @@ export default function PropertyEdit({
                         )}
                     </p>
                 )}
-                <div className="grid gap-8 md:grid-cols-[17rem_1fr] lg:gap-12">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-[17rem_minmax(0,1fr)] lg:gap-12">
                     <nav
                         aria-label={t('Property sections')}
                         className={cn(

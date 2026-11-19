@@ -163,7 +163,7 @@ export default function PropertiesIndex({
                         }
                     />
                 ) : (
-                    <ul className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <ul className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {properties.data.map((property) => (
                             <li key={property.id}>
                                 <ListingCard

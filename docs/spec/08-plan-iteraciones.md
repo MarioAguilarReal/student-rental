@@ -65,3 +65,13 @@ Historias: HU-03.03 y HU-06.01 a HU-06.06.
 - **Diario:** renovación 30 días antes y pausa al vencer (RN-85).
 - **Notificaciones** (correo + base de datos) y **auditoría** de asignaciones, dictámenes y versiones del checklist.
 - **Ya se puede publicar** de punta a punta: verificación → comprobante → precios → inspección aprobada → 3 fotos → publicar.
+
+## Iteración 5 — ✅ completada (2026-11-20)
+
+Historias: HU-07.01 y HU-07.02.
+
+- **Catálogo público en `/`:** campus y distancia, periodo, fecha de entrada, tipo de espacio, precio, amenidades, convivencia y orden; los filtros viven en la URL. Resultados como tarjetas con foto ("desde", espacios, distancia) y mapa con precios en ubicaciones aproximadas.
+- Solo aparecen espacios rentables con plan activo de propiedades publicadas con inspección vigente; a un cliente verificado se le ocultan los espacios que no admiten su comunidad (RN-31).
+- **Ficha `/stays/{id}`:** galería, insignia de inspección, espacios con precios y depósito, amenidades, reglas, mapa aproximado, fechas no disponibles y cotización (total, depósito, fecha de salida).
+- **Vista previa** para el propietario desde su editor ("Ver ficha").
+- El botón "Solicitar renta" queda listo y deshabilitado hasta la Iteración 6.

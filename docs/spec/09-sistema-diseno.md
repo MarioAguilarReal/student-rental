@@ -57,6 +57,9 @@ El modo oscuro usa neutros verdaderos (`#0b0c0c` de fondo) con las mismas funcio
 - **Catálogos de inmuebles:** cuadrícula de `ListingCard` (1 → 2 → 3 → 4 columnas), 24 px entre columnas y 40 px entre filas.
 - **Editor por secciones** (`pages/properties/edit.tsx`): a la izquierda la lista de secciones con resumen y marca de completo (✓) o pendiente (punto); a la derecha una sola sección; la sección se refleja en la URL (`#fotos`). El siguiente paso del ciclo de vida es el botón principal del encabezado. En el celular: lista → sección con "Todas las secciones".
 - **Inicio:** "Lo que sigue" (tareas con su botón), luego las cosas del usuario (propiedades como tarjetas), luego su estado.
+- **Páginas públicas (catálogo y ficha):** `PublicLayout` (marca a la izquierda, cuenta a la derecha, sin barra lateral). Catálogo: barra de búsqueda en píldora con campos rotulados, filtros rápidos en píldoras, "Más filtros" en diálogo, tarjetas con foto a la izquierda y mapa fijo con precios a la derecha (en el celular, botón Ver mapa / Ver lista). Ficha: título y ubicación aproximada, mosaico de fotos (portada + hasta 4), contenido a la izquierda y tarjeta de cotización fija a la derecha.
+- **Mapas:** Leaflet con la tipografía del producto; ubicación pública siempre aproximada (círculo o pin en cuadrícula de ~500 m).
+- **Cuadrículas:** siempre `grid-cols-1` en móvil y `minmax(0,1fr)` en columnas flexibles, para que un título truncado no desborde la pantalla.
 - **Acceso (login, registro):** una tarjeta blanca centrada sobre el marco, con el logotipo y el nombre arriba.
 - **Formularios:** etiqueta arriba del campo, controles de 40 px, ayuda en una línea gris debajo, error en rojo debajo del campo; los cambios críticos avisan antes de guardar (`ReinspectionNotice`).
 - **Acciones destructivas:** al final, en su propia sección, con la consecuencia en palabras y confirmación que nombra el objeto.

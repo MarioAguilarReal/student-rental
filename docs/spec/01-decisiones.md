@@ -88,3 +88,14 @@ Estados: **Aceptada** (confirmada por negocio) · **Propuesta** (sugerida por in
 | D-60 | Los ítems "por espacio" se responden **una vez por cada espacio rentable**; los espacios no rentables no se inspeccionan por separado.      | RN-87; un contenedor no rentable se revisa a través de las áreas comunes.                   | Aceptada |
 | D-61 | **Una renovación rechazada saca del catálogo** a una propiedad publicada o pausada (pasa a "Rechazada").                                    | Una propiedad que ya no es segura no debe seguir visible; las rentas confirmadas continúan. | Aceptada |
 | D-62 | Las **fotos de evidencia son privadas** y solo las ven el propietario, el inspector asignado y los administradores, con enlaces temporales. | Muestran el interior y los defectos de un domicilio (RN-07).                                | Aceptada |
+
+## Decisiones tomadas durante la Iteración 5
+
+| ID   | Decisión                                                                                                                              | Razón                                                                                          | Estado   |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------- |
+| D-63 | **Módulo `Search` de solo lectura** para el catálogo público; lee de Properties, Pricing y Catalog y nunca escribe.                   | Mantiene a cada módulo dueño de sus datos sin crear dependencias circulares.                   | Aceptada |
+| D-64 | La búsqueda filtra en SQL lo indexable y en PHP lo que depende del árbol de espacios (convivencia, disponibilidad, distancia exacta). | Suficiente para el volumen del MVP; revisar con PostGIS o vistas materializadas cuando crezca. | Aceptada |
+| D-65 | **Ubicación pública aproximada** en una cuadrícula de ~500 m; la dirección exacta nunca sale en el catálogo ni en la ficha.           | Privacidad y seguridad del inmueble hasta que hay una renta confirmada.                        | Aceptada |
+| D-66 | Disponibilidad como **contrato `UnitAvailability`**: hoy considera bloqueos; en la Iteración 6 sumará rentas sin cambiar al catálogo. | El catálogo y la cotización no cambian cuando lleguen las rentas.                              | Aceptada |
+| D-67 | La **cotización** usa exactamente las reglas de la solicitud (RN-42, RN-43, RN-63) y se calcula en el servidor.                       | El precio que ve el estudiante es el que se cobrará.                                           | Aceptada |
+| D-68 | Sin precios por persona ni cargos extra: la tarjeta muestra **"desde"** el plan más barato del periodo elegido.                       | Comparación honesta entre propiedades con varios espacios.                                     | Aceptada |
