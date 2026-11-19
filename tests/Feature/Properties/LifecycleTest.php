@@ -1,7 +1,8 @@
 <?php
 
 use App\Modules\Identity\Enums\Role;
-use App\Modules\Pricing\Contracts\RatePlanCatalog;
+use App\Modules\Pricing\Enums\RatePeriod;
+use App\Modules\Pricing\Models\RatePlan;
 use App\Modules\Properties\Enums\PropertyStatus;
 use App\Modules\Properties\Models\Property;
 use App\Modules\Properties\Models\Unit;
@@ -35,13 +36,13 @@ function readyToPublish(): Property
         $property->addMedia(UploadedFile::fake()->image("f{$i}.jpg"))->toMediaCollection(Property::PHOTOS);
     }
 
-    app()->instance(RatePlanCatalog::class, new class implements RatePlanCatalog
-    {
-        public function hasActivePlan(Property $property): bool
-        {
-            return true;
-        }
-    });
+    RatePlan::create([
+        'unit_id' => $property->units()->firstOrFail()->id,
+        'period' => RatePeriod::Monthly,
+        'price_minor' => 450_000,
+        'min_periods' => 1,
+        'max_periods' => 12,
+    ]);
 
     return $property;
 }
@@ -118,7 +119,7 @@ it('refuses to publish while something is missing (RN-10)', function (string $mi
         'expired inspection' => $property->update(['inspection_valid_until' => now()->subDay()]),
         'photos' => $property->getFirstMedia(Property::PHOTOS)?->delete(),
         'rentable unit' => $property->units()->update(['is_rentable' => false]),
-        'price plan' => app()->forgetInstance(RatePlanCatalog::class),
+        'price plan' => RatePlan::query()->update(['is_active' => false]),
     };
 
     $this->actingAs($property->owner)->post(route('properties.publish', $property))->assertSessionHasErrors('domain');

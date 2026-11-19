@@ -94,3 +94,39 @@ export type PublicationRequirement = {
     label: string;
     met: boolean;
 };
+
+export type PlanPeriod = 'weekly' | 'monthly' | 'yearly';
+
+export type PlanData = {
+    enabled: boolean;
+    price_minor: number;
+    min_periods: number;
+    max_periods: number;
+};
+
+export type PricingData = {
+    units: Record<
+        string,
+        {
+            deposit_minor: number | null;
+            plans: Record<PlanPeriod, PlanData | null>;
+        }
+    >;
+    blocks: {
+        id: number;
+        unit_id: number;
+        unit_name: string;
+        starts_on: string;
+        ends_on: string;
+        reason: string;
+        note: string | null;
+    }[];
+    commission_bp: number;
+    suggestions: {
+        weekly_factor: number;
+        yearly_factor: number;
+        round_to_minor: number;
+    };
+    periods: { value: PlanPeriod; label: string; max_limit: number }[];
+    blockReasons: { value: string; label: string }[];
+};

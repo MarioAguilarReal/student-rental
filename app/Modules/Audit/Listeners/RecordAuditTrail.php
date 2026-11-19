@@ -5,6 +5,7 @@ namespace App\Modules\Audit\Listeners;
 use App\Modules\Identity\Events\InternalRolesChanged;
 use App\Modules\Identity\Events\UserReactivated;
 use App\Modules\Identity\Events\UserSuspended;
+use App\Modules\Pricing\Events\UnitPricingUpdated;
 use App\Modules\Properties\Events\PropertyArchived;
 use App\Modules\Properties\Events\PropertyPaused;
 use App\Modules\Properties\Events\PropertyPublished;
@@ -87,5 +88,12 @@ class RecordAuditTrail
     public function propertyArchived(PropertyArchived $event): void
     {
         activity('property')->performedOn($event->property)->causedBy($event->actor)->event('archived')->log('Property archived');
+    }
+
+    public function unitPricingUpdated(UnitPricingUpdated $event): void
+    {
+        activity('pricing')->performedOn($event->unit)->causedBy($event->actor)
+            ->event('pricing_updated')->withProperties(['before' => $event->before, 'after' => $event->after])
+            ->log('Prices updated');
     }
 }

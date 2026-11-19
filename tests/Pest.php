@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Modules\Identity\Actions\AddAccountProfile;
 use App\Modules\Identity\Enums\Role;
+use Database\Seeders\CommissionRulesSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,7 +21,7 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->beforeEach(fn () => $this->seed(RolesAndPermissionsSeeder::class))
+    ->beforeEach(fn () => $this->seed([RolesAndPermissionsSeeder::class, CommissionRulesSeeder::class]))
     ->in('Feature');
 
 // Unit tests boot the framework (translator, config) but never touch the database.

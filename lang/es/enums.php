@@ -109,4 +109,8 @@ return [
 
     'UnitTemplate' => ['entire_place' => 'Completa', 'by_rooms' => 'Por habitaciones', 'mixed' => 'Completa y por habitaciones'],
 
+    'RatePeriod' => ['weekly' => 'Semanal', 'monthly' => 'Mensual', 'yearly' => 'Anual'],
+
+    'BlockReason' => ['maintenance' => 'Mantenimiento', 'owner_use' => 'Uso del propietario', 'other' => 'Otro'],
+
 ];

@@ -12,7 +12,7 @@ export default function FormActions({
     hint?: ReactNode;
 }) {
     return (
-        <div className="sticky bottom-0 z-10 -mx-4 mt-8 flex items-center justify-end gap-3 border-t bg-card px-4 py-3 md:-mx-8 md:px-8">
+        <div className="sticky bottom-0 z-10 mt-8 flex items-center justify-end gap-3 border-t bg-card py-3">
             {hint && (
                 <p className="mr-auto text-sm text-muted-foreground">{hint}</p>
             )}

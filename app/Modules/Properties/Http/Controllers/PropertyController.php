@@ -4,6 +4,7 @@ namespace App\Modules\Properties\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Modules\Pricing\Presenters\PricingPresenter;
 use App\Modules\Properties\Actions\CreateProperty;
 use App\Modules\Properties\Actions\UpdatePropertyDetails;
 use App\Modules\Properties\Enums\ManagementMode;
@@ -83,12 +84,15 @@ class PropertyController extends Controller
         return to_route('properties.edit', $property);
     }
 
-    public function edit(Request $request, Property $property): Response
+    public function edit(Request $request, Property $property, PricingPresenter $pricingPresenter): Response
     {
         /** @var User $user */
         $user = $request->user();
 
-        return Inertia::render('properties/edit', $this->presenter->forEditing($property, $user));
+        return Inertia::render('properties/edit', [
+            ...$this->presenter->forEditing($property, $user),
+            'pricing' => $pricingPresenter->forProperty($property),
+        ]);
     }
 
     public function update(UpdatePropertyDetailsRequest $request, Property $property, UpdatePropertyDetails $updateDetails): RedirectResponse

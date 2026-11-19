@@ -4,6 +4,8 @@ use App\Modules\Catalog\Enums\AmenityCategory;
 use App\Modules\Catalog\Enums\AmenityScope;
 use App\Modules\Identity\Enums\Permission;
 use App\Modules\Identity\Enums\Role;
+use App\Modules\Pricing\Enums\BlockReason;
+use App\Modules\Pricing\Enums\RatePeriod;
 use App\Modules\Properties\Enums\GenderPolicy;
 use App\Modules\Properties\Enums\ManagementMode;
 use App\Modules\Properties\Enums\PauseReason;
@@ -29,7 +31,7 @@ it('has a Spanish label for every enum case shown to users', function () {
         AmenityScope::class, AmenityCategory::class,
         ManagementMode::class, PropertyType::class, PropertyStatus::class,
         PauseReason::class, UnitType::class, UnitStatus::class,
-        GenderPolicy::class, UnitTemplate::class,
+        GenderPolicy::class, UnitTemplate::class, RatePeriod::class, BlockReason::class,
     ];
 
     foreach (collect($enums)->flatMap(fn (string $enum) => $enum::cases()) as $case) {

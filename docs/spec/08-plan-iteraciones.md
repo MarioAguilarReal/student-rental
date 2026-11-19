@@ -44,3 +44,13 @@ Historias: HU-03.02 y HU-04.01 a HU-04.09.
 - **Properties:** alta (también a nombre de un propietario, RN-15), datos generales, dirección con pin en mapa, árbol de espacios con plantillas iniciales y validación de jerarquía (RN-20), convivencia que solo puede restringirse (RN-30, RN-31), amenidades por nivel, reglas de la casa, hasta 30 fotos con miniaturas WEBP, comprobante de propiedad privado (D-49), solicitud de inspección (RN-06), publicación con lista de requisitos (RN-10), pausa y archivado (RN-13).
 - **Cambios críticos (RN-11):** cambiar la ubicación o agregar, quitar o cambiar el tipo o la capacidad de un espacio regresa a inspección una propiedad ya inspeccionada, con aviso previo en la interfaz.
 - **Dependencias con iteraciones futuras:** publicar exige un plan de precio activo (contrato `Pricing\Contracts\RatePlanCatalog`, que en la Iteración 3 deja de responder "no") y una inspección aprobada (Iteración 4). Archivar y quitar espacios revisarán rentas bloqueantes en la Iteración 6.
+
+## Iteración 3 — ✅ completada (2026-11-20)
+
+Historias: HU-05.01 a HU-05.03 y HU-03.04 (lectura de la comisión).
+
+- **Pricing:** planes semanal, mensual y anual por espacio rentable con precios sugeridos (RN-41, factores en `config/pricing.php`), mínimo y máximo de periodos (RN-43), un plan por periodo (RN-40, índice único), depósito (RN-44) y bloqueos de fechas por familia de espacios (RN-22, RN-26).
+- **Payments:** reglas de comisión con vigencia (10 % / 20 %, RN-50) y el contrato `CommissionRates`; la gestión desde la interfaz llega en la Iteración 7.
+- **Publicación:** `RatePlanCatalog` ya responde con los planes reales; solo falta la inspección aprobada (Iteración 4) para poder publicar.
+- **Interfaz:** sección "Precios y disponibilidad" en el editor, con lo que recibe el propietario después de la comisión, sugerencias de un clic y bloqueos.
+- **Pendiente para la Iteración 6:** los bloqueos y los cambios de espacios revisarán rentas bloqueantes.

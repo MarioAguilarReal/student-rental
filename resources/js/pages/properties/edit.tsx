@@ -6,6 +6,7 @@ import DetailsForm from '@/components/properties/details-form';
 import FeaturesForm from '@/components/properties/features-form';
 import LocationForm from '@/components/properties/location-form';
 import PhotosSection from '@/components/properties/photos-section';
+import PricingSection from '@/components/properties/pricing-section';
 import PropertyStatusBadge from '@/components/properties/property-status-badge';
 import StatusPanel, {
     NextStepAction,
@@ -16,6 +17,7 @@ import { useTranslation } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 import { index } from '@/routes/properties';
 import type {
+    PricingData,
     PropertyDetail,
     PropertyEditorOptions,
     PropertyPhoto,
@@ -40,6 +42,7 @@ type Props = {
         requestInspection: boolean;
     };
     options: PropertyEditorOptions;
+    pricing: PricingData;
 };
 
 const SECTIONS = [
@@ -47,6 +50,7 @@ const SECTIONS = [
     'details',
     'location',
     'spaces',
+    'pricing',
     'photos',
     'features',
 ] as const;
@@ -72,6 +76,7 @@ export default function PropertyEdit({
     publication,
     can,
     options,
+    pricing,
 }: Props) {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
@@ -101,6 +106,13 @@ export default function PropertyEdit({
     const met = publication.filter((requirement) => requirement.met).length;
     const rentable = units.filter((unit) => unit.is_rentable).length;
     const missingPhotos = Math.max(0, 3 - photos.length);
+    const pricedUnits = units.filter(
+        (unit) =>
+            unit.is_rentable &&
+            Object.values(pricing.units[unit.id]?.plans ?? {}).some(
+                (plan) => plan?.enabled,
+            ),
+    ).length;
     const genderLabel = options.genderPolicies.find(
         (option) => option.value === property.gender_policy,
     )?.label;
@@ -147,6 +159,17 @@ export default function PropertyEdit({
             complete: rentable > 0,
         },
         {
+            key: 'pricing',
+            title: t('Prices and availability'),
+            summary: rentable
+                ? t(':priced of :total rentable spaces with a price', {
+                      priced: pricedUnits,
+                      total: rentable,
+                  })
+                : t('No rentable spaces yet'),
+            complete: pricedUnits > 0,
+        },
+        {
             key: 'photos',
             title: t('Photos'),
             summary: missingPhotos
@@ -191,6 +214,14 @@ export default function PropertyEdit({
                 property={property}
                 units={units}
                 options={options}
+                disabled={readOnly}
+            />
+        ),
+        pricing: (
+            <PricingSection
+                propertyId={property.id}
+                units={units}
+                pricing={pricing}
                 disabled={readOnly}
             />
         ),
