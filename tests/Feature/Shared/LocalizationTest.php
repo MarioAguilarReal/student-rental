@@ -2,6 +2,7 @@
 
 use App\Modules\Catalog\Enums\AmenityCategory;
 use App\Modules\Catalog\Enums\AmenityScope;
+use App\Modules\Identity\Enums\CohabitationGender;
 use App\Modules\Identity\Enums\Permission;
 use App\Modules\Identity\Enums\Role;
 use App\Modules\Inspections\Enums\AnswerResult;
@@ -11,6 +12,8 @@ use App\Modules\Inspections\Enums\InspectionResult;
 use App\Modules\Inspections\Enums\InspectionStatus;
 use App\Modules\Inspections\Enums\InspectionType;
 use App\Modules\Inspections\Enums\ItemScope;
+use App\Modules\Payments\Enums\ChargeConcept;
+use App\Modules\Payments\Enums\ChargeStatus;
 use App\Modules\Pricing\Enums\BlockReason;
 use App\Modules\Pricing\Enums\RatePeriod;
 use App\Modules\Properties\Enums\GenderPolicy;
@@ -21,6 +24,7 @@ use App\Modules\Properties\Enums\PropertyType;
 use App\Modules\Properties\Enums\UnitStatus;
 use App\Modules\Properties\Enums\UnitTemplate;
 use App\Modules\Properties\Enums\UnitType;
+use App\Modules\Rentals\Enums\RentalStatus;
 use App\Modules\Verification\Enums\CommunityType;
 use App\Modules\Verification\Enums\DocumentStatus;
 use App\Modules\Verification\Enums\DocumentType;
@@ -41,6 +45,7 @@ it('has a Spanish label for every enum case shown to users', function () {
         GenderPolicy::class, UnitTemplate::class, RatePeriod::class, BlockReason::class,
         ChecklistStatus::class, ChecklistCategory::class, ItemScope::class,
         InspectionType::class, InspectionStatus::class, InspectionResult::class, AnswerResult::class,
+        RentalStatus::class, ChargeStatus::class, ChargeConcept::class, CohabitationGender::class,
     ];
 
     foreach (collect($enums)->flatMap(fn (string $enum) => $enum::cases()) as $case) {

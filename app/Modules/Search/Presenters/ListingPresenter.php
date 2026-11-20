@@ -92,6 +92,7 @@ class ListingPresenter
                 'capacity' => $unit->capacity,
                 'description' => $unit->description,
                 'gender_policy' => $unit->effectiveGenderPolicy()->label(),
+                'gender_restricted' => $unit->effectiveGenderPolicy()->isRestricted(),
                 'communities' => $this->communities($unit->effectiveAllowedCommunities()),
                 'amenities' => $unit->amenities->pluck('name')->values(),
                 'deposit_minor' => (int) ($deposits[$unit->id] ?? 0),

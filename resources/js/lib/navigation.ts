@@ -8,6 +8,8 @@ import {
     ListChecks,
     Sofa,
     ClipboardCheck,
+    KeyRound,
+    Luggage,
     LayoutGrid,
     Users,
 } from 'lucide-react';
@@ -20,6 +22,7 @@ import { index as checklistsIndex } from '@/routes/checklists';
 import { agenda as inspectionAgenda } from '@/routes/inspections';
 import { index as inspectionQueue } from '@/routes/inspections/queue';
 import { index as myProperties } from '@/routes/properties';
+import { index as myRentals, manage as manageRentals } from '@/routes/rentals';
 import { index as allProperties } from '@/routes/properties/admin';
 import { index as usersIndex } from '@/routes/users';
 import { show as verificationShow } from '@/routes/verifications';
@@ -37,10 +40,22 @@ const mainItems: GuardedNavItem[] = [
         permissions: ['verification.documents.upload'],
     },
     {
+        title: 'My rentals',
+        href: myRentals(),
+        icon: Luggage,
+        permissions: ['rentals.request'],
+    },
+    {
         title: 'My properties',
         href: myProperties(),
         icon: Home,
         permissions: ['properties.create'],
+    },
+    {
+        title: 'Rentals',
+        href: manageRentals(),
+        icon: KeyRound,
+        permissions: ['properties.create', 'properties.view_any'],
     },
     {
         title: 'My inspections',

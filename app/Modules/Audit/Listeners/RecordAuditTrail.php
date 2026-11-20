@@ -13,6 +13,15 @@ use App\Modules\Properties\Events\PropertyArchived;
 use App\Modules\Properties\Events\PropertyPaused;
 use App\Modules\Properties\Events\PropertyPublished;
 use App\Modules\Properties\Events\PropertySubmittedForInspection;
+use App\Modules\Rentals\Events\RentalApproved;
+use App\Modules\Rentals\Events\RentalCancelled;
+use App\Modules\Rentals\Events\RentalCompleted;
+use App\Modules\Rentals\Events\RentalConfirmed;
+use App\Modules\Rentals\Events\RentalExpired;
+use App\Modules\Rentals\Events\RentalRejected;
+use App\Modules\Rentals\Events\RentalRequested;
+use App\Modules\Rentals\Events\RentalStarted;
+use App\Modules\Rentals\Models\Rental;
 use App\Modules\Verification\Events\VerificationApproved;
 use App\Modules\Verification\Events\VerificationExpired;
 use App\Modules\Verification\Events\VerificationRejected;
@@ -119,5 +128,38 @@ class RecordAuditTrail
         activity('inspection')->performedOn($event->template)->causedBy($event->actor)->event('checklist_published')
             ->withProperties(['version' => $event->template->version])
             ->log('Checklist published');
+    }
+
+    /**
+     * RN-90: every rental status change, with its commercial copy when it is created.
+     */
+    public function rentalChanged(RentalRequested|RentalApproved|RentalRejected|RentalExpired|RentalConfirmed|RentalStarted|RentalCompleted|RentalCancelled $event): void
+    {
+        $rental = $event->rental;
+        $logger = activity('rental')->performedOn($rental);
+        $logger = $event->actor ? $logger->causedBy($event->actor) : $logger->causedByAnonymous();
+
+        $logger->event($rental->status->value)
+            ->withProperties(array_filter([
+                'status' => $rental->status->value,
+                'reason' => $rental->rejection_reason ?? $rental->cancellation_reason,
+                'commercial' => $event instanceof RentalRequested ? $this->commercialCopy($rental) : null,
+            ]))
+            ->log('Rental '.$rental->status->value);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function commercialCopy(Rental $rental): array
+    {
+        return [
+            'period' => $rental->period->value,
+            'periods' => $rental->periods,
+            'price_minor' => $rental->price_minor,
+            'deposit_minor' => $rental->deposit_minor,
+            'management_mode' => $rental->management_mode->value,
+            'commission_bp' => $rental->commission_bp,
+        ];
     }
 }

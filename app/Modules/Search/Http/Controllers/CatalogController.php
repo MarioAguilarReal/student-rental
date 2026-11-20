@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Modules\Catalog\Models\Amenity;
 use App\Modules\Catalog\Models\Campus;
+use App\Modules\Identity\Enums\CohabitationGender;
 use App\Modules\Pricing\Enums\RatePeriod;
 use App\Modules\Properties\Enums\GenderPolicy;
 use App\Modules\Properties\Enums\UnitType;
@@ -82,6 +83,9 @@ class CatalogController extends Controller
             'preview' => ! $listed,
             'quote' => $unit && $period && $start ? $quote->handle($unit, $period, $start, max(1, $request->integer('periods', 1))) : null,
             'canEdit' => $request->user() !== null && Gate::allows('update', $property),
+            // RN-32: asked only when the space has a gender rule and the person never declared it.
+            'needsGender' => $request->user() !== null && $request->user()->cohabitation_gender === null,
+            'genderOptions' => CohabitationGender::options(),
         ]);
     }
 }

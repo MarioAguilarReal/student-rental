@@ -75,3 +75,15 @@ Historias: HU-07.01 y HU-07.02.
 - **Ficha `/stays/{id}`:** galería, insignia de inspección, espacios con precios y depósito, amenidades, reglas, mapa aproximado, fechas no disponibles y cotización (total, depósito, fecha de salida).
 - **Vista previa** para el propietario desde su editor ("Ver ficha").
 - El botón "Solicitar renta" queda listo y deshabilitado hasta la Iteración 6.
+
+## Iteración 6 — ✅ completada (2026-11-23)
+
+Historias: HU-08.01 a HU-08.07.
+
+- **Solicitud** desde la ficha: desglose, calendario de cargos, reglas de la casa que se aceptan, mensaje opcional y género de convivencia solo si el espacio lo exige (RN-32, privado). Valida verificación, convivencia, periodos, fechas, disponibilidad y traslapes propios; copia los valores comerciales (RN-45) y da 72 h al operador.
+- **Aprobación con concurrencia** (RN-24, RN-25): bloqueo de la propiedad, expiración en línea de aprobaciones vencidas, revalidación de la familia del espacio y del cliente, calendario de cargos (RN-70, D-70) y restricción de exclusión en PostgreSQL. Rechazo con motivo (RN-67).
+- **Disponibilidad:** el contrato `UnitAvailability` ya suma las rentas bloqueantes (D-66); el catálogo, la ficha y la cotización no cambiaron. Los bloqueos de fechas (RN-26), archivar (RN-13) y quitar espacios (D-69) revisan las rentas.
+- **Tareas programadas:** expiraciones cada 15 minutos (RN-61, RN-62) y ciclo diario Confirmada → Activa → Finalizada (RN-65).
+- **Pantallas:** "Mis rentas" (el cliente ve la dirección exacta y el contacto al confirmarse), "Rentas" para propietarios y administradores (solo lectura en administradas) y el detalle con aprobar, rechazar y cancelar (solo administradores, RN-66).
+- **Notificaciones** (correo + base de datos) y **auditoría** de cada cambio de estado.
+- **Pendiente para la Iteración 7:** pagar el primer cargo llama a `ConfirmRental` (RN-71), que ya rechaza automáticamente las solicitudes en conflicto (RN-24). Mientras tanto, una renta aprobada expira a las 48 h.

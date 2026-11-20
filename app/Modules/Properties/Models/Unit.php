@@ -131,4 +131,18 @@ class Unit extends Model
             ?? $this->ancestors()->first(fn (Unit $unit) => $unit->allowed_communities !== null)->allowed_communities
             ?? $this->property->allowed_communities;
     }
+
+    /**
+     * RN-22: ids of the unit, its ancestors and its descendants (the "family" that shares dates).
+     *
+     * @return list<int>
+     */
+    public function familyIds(): array
+    {
+        return [
+            $this->id,
+            ...$this->ancestors()->map(fn (Unit $unit): int => $unit->id)->all(),
+            ...$this->descendants()->map(fn (Unit $unit): int => $unit->id)->all(),
+        ];
+    }
 }

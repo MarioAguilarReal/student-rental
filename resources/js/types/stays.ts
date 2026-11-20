@@ -50,6 +50,7 @@ export type StayUnit = {
     capacity: number;
     description: string | null;
     gender_policy: string;
+    gender_restricted: boolean;
     communities: string[];
     amenities: string[];
     deposit_minor: number;
@@ -68,4 +69,10 @@ export type StayQuote = {
     deposit_minor: number;
     available: boolean;
     errors: string[];
+    charges: {
+        number: number;
+        amount_minor: number;
+        deposit_minor: number;
+        due_on: string | null;
+    }[];
 };

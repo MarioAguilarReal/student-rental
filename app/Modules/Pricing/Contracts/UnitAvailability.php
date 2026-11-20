@@ -7,7 +7,7 @@ use Carbon\CarbonImmutable;
 
 /**
  * RN-22: whether a unit can be rented in [start, end), looking at the unit, its ancestors and
- * its descendants. Today only availability blocks count; Rentals (Iteración 6) adds rentals.
+ * its descendants. Pricing counts its blocks; Rentals decorates it with blocking rentals (D-66).
  */
 interface UnitAvailability
 {

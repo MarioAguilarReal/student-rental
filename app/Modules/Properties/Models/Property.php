@@ -170,4 +170,17 @@ class Property extends Model implements HasMedia
     {
         return collect([$this->neighborhood, $this->city, $this->state])->filter()->implode(', ');
     }
+
+    /**
+     * The exact address: only for the operator, the inspector and a client with a confirmed rental.
+     */
+    public function fullAddress(): string
+    {
+        return collect([
+            trim("{$this->street} {$this->exterior_number}".($this->interior_number ? " int. {$this->interior_number}" : '')),
+            $this->neighborhood,
+            trim("{$this->postal_code} {$this->city}"),
+            $this->state,
+        ])->filter()->implode(', ');
+    }
 }

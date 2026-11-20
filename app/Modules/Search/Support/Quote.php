@@ -2,19 +2,22 @@
 
 namespace App\Modules\Search\Support;
 
+use App\Modules\Payments\Support\ChargeSchedule;
 use App\Modules\Pricing\Contracts\UnitAvailability;
 use App\Modules\Pricing\Enums\RatePeriod;
 use App\Modules\Pricing\Models\RatePlan;
 use App\Modules\Pricing\Models\UnitDeposit;
 use App\Modules\Pricing\Support\RentalPeriods;
 use App\Modules\Properties\Models\Unit;
+use App\Modules\Shared\Money;
 use App\Modules\Shared\Support\Text;
 use Carbon\CarbonImmutable;
 
 /**
  * HU-07.02: what a stay would cost before requesting it. Same rules the rental request will
  * enforce: start from tomorrow up to 12 months ahead (RN-63), periods within the plan's range
- * (RN-43), end date by RN-42, availability of the space's family (RN-22).
+ * (RN-43), end date by RN-42, availability of the space's family (RN-22), and the charges the
+ * approval would generate (RN-70).
  */
 class Quote
 {
@@ -49,6 +52,15 @@ class Quote
             $errors[] = Text::of('The space is not available on those dates.');
         }
 
+        $charges = $plan && $errors === []
+            ? array_map(fn (array $charge): array => [
+                'number' => $charge['number'],
+                'amount_minor' => $charge['rent']->plus($charge['deposit'])->minorAmount(),
+                'deposit_minor' => $charge['deposit']->minorAmount(),
+                'due_on' => $charge['number'] === 1 ? null : $charge['due_on']->toDateString(),
+            ], ChargeSchedule::plan($period, $periods, $start, $plan->price(), Money::ofMinor($deposit, $plan->currency), $today))
+            : [];
+
         return [
             'unit_id' => $unit->id,
             'period' => $period->value,
@@ -60,6 +72,7 @@ class Quote
             'deposit_minor' => $deposit,
             'available' => $available,
             'errors' => $errors,
+            'charges' => $charges,
         ];
     }
 }

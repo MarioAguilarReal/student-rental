@@ -1,6 +1,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { BadgeCheck, Check, Images, Pencil, Users, X } from 'lucide-react';
 import { useState } from 'react';
+import RequestRentalDialog from '@/components/rentals/request-rental-dialog';
 import ApproximateMap from '@/components/stays/approximate-map';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,7 @@ import { home, login } from '@/routes';
 import { edit as editProperty } from '@/routes/properties';
 import { show } from '@/routes/stays';
 import { show as verification } from '@/routes/verifications';
-import type { StayQuote, StayUnit } from '@/types';
+import type { Option, StayQuote, StayUnit } from '@/types';
 
 type Props = {
     property: {
@@ -45,6 +46,8 @@ type Props = {
     quote: StayQuote | null;
     preview: boolean;
     canEdit: boolean;
+    needsGender: boolean;
+    genderOptions: Option[];
 };
 
 /**
@@ -59,6 +62,8 @@ export default function StayShow({
     quote,
     preview,
     canEdit,
+    needsGender,
+    genderOptions,
 }: Props) {
     const { t } = useTranslation();
     const [gallery, setGallery] = useState(false);
@@ -303,6 +308,10 @@ export default function StayShow({
                                 propertyId={property.id}
                                 units={units}
                                 quote={quote}
+                                houseRules={houseRules}
+                                needsGender={needsGender}
+                                genderOptions={genderOptions}
+                                canRequest={!preview}
                             />
                         </div>
                     </aside>
@@ -406,10 +415,18 @@ function QuoteCard({
     propertyId,
     units,
     quote,
+    houseRules,
+    needsGender,
+    genderOptions,
+    canRequest,
 }: {
     propertyId: number;
     units: StayUnit[];
     quote: StayQuote | null;
+    houseRules: Props['houseRules'];
+    needsGender: boolean;
+    genderOptions: Option[];
+    canRequest: boolean;
 }) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
@@ -653,14 +670,26 @@ function QuoteCard({
                     <Link href={login()}>{t('Log in to request it')}</Link>
                 </Button>
             ) : can('rentals.request') ? (
-                <>
-                    <Button size="lg" className="w-full" disabled>
-                        {t('Request rental')}
-                    </Button>
-                    <p className="text-center text-xs text-muted-foreground">
-                        {t('Requests open very soon.')}
-                    </p>
-                </>
+                canRequest && current && current.errors.length === 0 ? (
+                    <RequestRentalDialog
+                        key={`${current.unit_id}-${current.period}-${current.start}-${current.periods}`}
+                        propertyId={propertyId}
+                        unit={unit}
+                        quote={current}
+                        houseRules={houseRules}
+                        askGender={unit.gender_restricted && needsGender}
+                        genderOptions={genderOptions}
+                    />
+                ) : (
+                    <>
+                        <Button size="lg" className="w-full" disabled>
+                            {t('Request rental')}
+                        </Button>
+                        <p className="text-center text-xs text-muted-foreground">
+                            {t('Choose your dates to request this space.')}
+                        </p>
+                    </>
+                )
             ) : (
                 <Button asChild size="lg" variant="outline" className="w-full">
                     <Link href={verification()}>

@@ -133,4 +133,15 @@ return [
 
     'AnswerResult' => ['compliant' => 'Cumple', 'non_compliant' => 'No cumple', 'not_applicable' => 'No aplica'],
 
+    'RentalStatus' => [
+        'requested' => 'Solicitada', 'approved' => 'Aprobada', 'rejected' => 'Rechazada', 'expired' => 'Expirada',
+        'confirmed' => 'Confirmada', 'active' => 'Activa', 'completed' => 'Finalizada', 'cancelled' => 'Cancelada',
+    ],
+
+    'ChargeStatus' => ['pending' => 'Pendiente', 'paid' => 'Pagado', 'failed' => 'Fallido', 'overdue' => 'Vencido', 'cancelled' => 'Cancelado'],
+
+    'ChargeConcept' => ['rent' => 'Renta', 'rent_and_deposit' => 'Renta y depósito'],
+
+    'CohabitationGender' => ['female' => 'Mujer', 'male' => 'Hombre'],
+
 ];

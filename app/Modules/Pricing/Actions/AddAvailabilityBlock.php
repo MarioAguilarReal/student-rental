@@ -7,18 +7,21 @@ use App\Modules\Pricing\Enums\BlockReason;
 use App\Modules\Pricing\Models\AvailabilityBlock;
 use App\Modules\Properties\Actions\EnsurePropertyIsEditable;
 use App\Modules\Properties\Models\Unit;
+use App\Modules\Rentals\Contracts\RentalOccupancy;
 use App\Modules\Shared\Exceptions\BusinessRuleViolation;
 use App\Modules\Shared\Support\Text;
 use Carbon\CarbonImmutable;
 
 /**
  * HU-05.03 · RN-22 / RN-26: blocks dates on a unit, which also blocks its parent and its
- * subdivisions. A block cannot overlap another block of the same family.
- * TODO(Iteración 6): also refuse dates that have blocking rentals (RN-26).
+ * subdivisions. A block cannot overlap another block of the same family, nor dates with
+ * blocking rentals (RN-26).
  */
 class AddAvailabilityBlock
 {
     public const MAX_DAYS_AHEAD = 730;
+
+    public function __construct(private RentalOccupancy $rentals) {}
 
     public function handle(User $actor, Unit $unit, CarbonImmutable $startsOn, CarbonImmutable $endsOn, BlockReason $reason, ?string $note): AvailabilityBlock
     {
@@ -44,6 +47,10 @@ class AddAvailabilityBlock
 
         if ($overlaps) {
             throw new BusinessRuleViolation('RN-22', Text::of('Those dates overlap another block of this space or of the space it belongs to.'), 'starts_on');
+        }
+
+        if ($this->rentals->isOccupied($unit, $startsOn, $endsOn)) {
+            throw new BusinessRuleViolation('RN-26', Text::of('Those dates are already rented.'), 'starts_on');
         }
 
         return AvailabilityBlock::create([

@@ -15,7 +15,7 @@
 │  Policies + roles/permisos  ·  Eventos de dominio → Listeners (en cola)            │
 │                                                                                    │
 │  Módulos: Identity · Verification · Catalog · Properties · Pricing · Rentals ·     │
-│           Payments · Inspections · Notifications · Audit · Shared                  │
+│           Payments · Inspections · Notifications · Audit · Search · Shared         │
 │                                                                                    │
 │  Cola (driver database) · Scheduler (expiraciones, vencimientos, transiciones)     │
 └──────────┬─────────────────────────────┬──────────────────────────────┬────────────┘
@@ -68,6 +68,7 @@ app/
     Inspections/             # asignación, checklist, dictamen, vigencia
     Notifications/           # listeners que traducen eventos → notificaciones
     Audit/                   # bitácora
+    Search/                  # catálogo público de solo lectura (D-63)
   Http/ , Models/ ...        # lo que trae el starter kit (auth, settings), sin mover
 database/
   migrations/                # centralizadas, con prefijo de módulo en el nombre

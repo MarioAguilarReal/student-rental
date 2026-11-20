@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Modules\Identity\Enums\CohabitationGender;
 use App\Modules\Verification\Enums\VerificationKind;
 use App\Modules\Verification\Models\VerificationProfile;
 use Database\Factories\UserFactory;
@@ -29,6 +30,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property Carbon|null $birth_date
+ * @property CohabitationGender|null $cohabitation_gender RN-32: private, never shown to others
  * @property Carbon|null $suspended_at
  * @property string|null $suspension_reason
  * @property string|null $two_factor_secret
@@ -59,6 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             'two_factor_confirmed_at' => 'datetime',
             'birth_date' => 'date',
             'suspended_at' => 'datetime',
+            'cohabitation_gender' => CohabitationGender::class,
         ];
     }
 

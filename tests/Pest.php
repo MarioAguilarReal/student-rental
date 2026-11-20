@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Modules\Catalog\Models\Institution;
 use App\Modules\Identity\Actions\AddAccountProfile;
 use App\Modules\Identity\Enums\Role;
 use App\Modules\Inspections\Actions\OpenInspection;
@@ -12,6 +13,8 @@ use App\Modules\Properties\Enums\PropertyStatus;
 use App\Modules\Properties\Enums\UnitType;
 use App\Modules\Properties\Models\Property;
 use App\Modules\Properties\Models\Unit;
+use App\Modules\Verification\Enums\CommunityType;
+use App\Modules\Verification\Enums\VerificationStatus;
 use Database\Seeders\ChecklistSeeder;
 use Database\Seeders\CommissionRulesSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
@@ -139,4 +142,41 @@ function listedProperty(array $attributes = [], array $unit = [], int $monthlyMi
     ]);
 
     return $property;
+}
+
+/**
+ * A client with a current verification (RN-01).
+ *
+ * @param  array<string, mixed>  $attributes
+ */
+function verifiedClient(CommunityType $community = CommunityType::Student, array $attributes = []): User
+{
+    $client = userWithRole(Role::Client, $attributes);
+    $client->verificationProfiles()->update([
+        'status' => VerificationStatus::Verified,
+        'community_type' => $community,
+        'institution_id' => Institution::factory()->create()->id,
+        'reviewed_at' => now(),
+        'verified_until' => now()->addMonths(6)->toDateString(),
+    ]);
+
+    return $client->fresh() ?? $client;
+}
+
+/**
+ * What a client sends to request the listed property's first space.
+ *
+ * @return array<string, mixed>
+ */
+function rentalRequest(Property $property, array $overrides = []): array
+{
+    return [
+        'unit_id' => $property->units()->firstOrFail()->id,
+        'period' => 'monthly',
+        'starts_on' => now()->addDays(10)->toDateString(),
+        'periods' => 2,
+        'accept_rules' => true,
+        'message' => 'Hola, estudio en la facultad.',
+        ...$overrides,
+    ];
 }

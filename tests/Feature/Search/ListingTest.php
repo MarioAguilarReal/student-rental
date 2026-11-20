@@ -42,7 +42,11 @@ it('quotes a stay: total, deposit and the end date by RN-42', function () {
             ->where('quote.deposit_minor', 450_000)
             ->where('quote.end', $start->addMonthsNoOverflow(5)->toDateString())
             ->where('quote.available', true)
-            ->where('quote.errors', []));
+            ->where('quote.errors', [])
+            ->has('quote.charges', 5)
+            ->where('quote.charges.0.amount_minor', 900_000)
+            ->where('quote.charges.0.due_on', null)
+            ->where('quote.charges.1.due_on', $start->addMonthNoOverflow()->toDateString()));
 });
 
 it('explains why a stay cannot be quoted', function (array $query, string $message) {

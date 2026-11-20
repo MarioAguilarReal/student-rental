@@ -14,6 +14,14 @@ use App\Modules\Properties\Events\PropertyArchived;
 use App\Modules\Properties\Events\PropertyPaused;
 use App\Modules\Properties\Events\PropertyPublished;
 use App\Modules\Properties\Events\PropertySubmittedForInspection;
+use App\Modules\Rentals\Events\RentalApproved;
+use App\Modules\Rentals\Events\RentalCancelled;
+use App\Modules\Rentals\Events\RentalCompleted;
+use App\Modules\Rentals\Events\RentalConfirmed;
+use App\Modules\Rentals\Events\RentalExpired;
+use App\Modules\Rentals\Events\RentalRejected;
+use App\Modules\Rentals\Events\RentalRequested;
+use App\Modules\Rentals\Events\RentalStarted;
 use App\Modules\Shared\Providers\ModuleServiceProvider;
 use App\Modules\Verification\Events\VerificationApproved;
 use App\Modules\Verification\Events\VerificationExpired;
@@ -38,5 +46,13 @@ final class AuditServiceProvider extends ModuleServiceProvider
         InspectionAssigned::class => [[RecordAuditTrail::class, 'inspectionAssigned']],
         InspectionCompleted::class => [[RecordAuditTrail::class, 'inspectionCompleted']],
         ChecklistPublished::class => [[RecordAuditTrail::class, 'checklistPublished']],
+        RentalRequested::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalApproved::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalRejected::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalExpired::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalConfirmed::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalStarted::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalCompleted::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        RentalCancelled::class => [[RecordAuditTrail::class, 'rentalChanged']],
     ];
 }

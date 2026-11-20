@@ -19,7 +19,7 @@ Plataforma de renta tipo Airbnb para docentes, estudiantes y estudiantes de inte
 
 ## Estructura modular
 
-- `app/Modules/<Module>/` es una carpeta base aprobada. Módulos: Shared, Identity, Verification, Catalog, Properties, Pricing, Rentals, Payments, Inspections, Notifications, Audit.
+- `app/Modules/<Module>/` es una carpeta base aprobada. Módulos: Shared, Identity, Verification, Catalog, Properties, Pricing, Rentals, Payments, Inspections, Notifications, Audit, Search (catálogo de solo lectura, D-63).
 - Dentro de un módulo: `Actions/`, `Contracts/`, `Enums/`, `Events/`, `Http/Controllers/`, `Http/Requests/`, `Jobs/`, `Listeners/`, `Models/`, `Policies/`, `routes.php` y `<Module>ServiceProvider.php` (extiende `App\Modules\Shared\Providers\ModuleServiceProvider`; ahí se registran policies, listeners y tareas programadas).
 - Lo que trae el starter kit (`app/Models/User.php`, `app/Http/Controllers/Settings`, Fortify) se queda donde está.
 - Migraciones, factories y seeders siguen en `database/`.
