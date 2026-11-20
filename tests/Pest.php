@@ -118,7 +118,7 @@ function propertyAwaitingInspection(): Inspection
 }
 
 /**
- * A published, inspected property near (32.53, -117.02) with one rentable space and a monthly plan.
+ * A published, inspected property near (21.4920, -104.8942) in Tepic with one rentable space and a monthly plan.
  *
  * @param  array<string, mixed>  $attributes
  * @param  array<string, mixed>  $unit
@@ -128,8 +128,8 @@ function listedProperty(array $attributes = [], array $unit = [], int $monthlyMi
     $property = Property::factory()->inspected()->create([
         'status' => PropertyStatus::Published,
         'published_at' => now(),
-        'latitude' => 32.5300,
-        'longitude' => -117.0200,
+        'latitude' => 21.4920,
+        'longitude' => -104.8942,
         ...$attributes,
     ]);
     $space = Unit::factory()->create(['property_id' => $property->id, ...$unit]);

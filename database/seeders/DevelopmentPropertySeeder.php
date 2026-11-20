@@ -33,19 +33,19 @@ class DevelopmentPropertySeeder extends Seeder
             return;
         }
 
-        $property = $createProperty->handle($owner, $owner, 'Casa estudiantil cerca de Campus Centro', PropertyType::House, ManagementMode::SelfManaged);
+        $property = $createProperty->handle($owner, $owner, 'Casa estudiantil en el centro de Tepic', PropertyType::House, ManagementMode::SelfManaged);
         $property->update(['description' => 'Casa de dos plantas a 10 minutos caminando del campus, con cocina equipada y patio.']);
 
         $updateLocation->handle($property, [
-            'street' => 'Calle Universidad',
+            'street' => 'Calle Zacatecas',
             'exterior_number' => '245',
             'interior_number' => null,
-            'neighborhood' => 'Zona Centro',
-            'city' => 'Tijuana',
-            'state' => 'Baja California',
-            'postal_code' => '22000',
-            'latitude' => 32.5292,
-            'longitude' => -117.0279,
+            'neighborhood' => 'Centro',
+            'city' => 'Tepic',
+            'state' => 'Nayarit',
+            'postal_code' => '63000',
+            'latitude' => 21.5072,
+            'longitude' => -104.8968,
         ]);
 
         $applyTemplate->handle($property, UnitTemplate::Mixed, 3, 4);

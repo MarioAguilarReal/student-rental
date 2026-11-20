@@ -118,7 +118,7 @@ export default function InstitutionForm({ institution }: Props) {
                                                 id="email_domains"
                                                 name="email_domains"
                                                 required
-                                                placeholder="uabc.edu.mx, uabc.mx"
+                                                placeholder="uan.edu.mx, uan.mx"
                                                 defaultValue={institution?.email_domains.join(
                                                     ', ',
                                                 )}
@@ -168,7 +168,7 @@ export default function InstitutionForm({ institution }: Props) {
                                 <CardTitle>{t('Campuses')}</CardTitle>
                                 <CardDescription>
                                     {t(
-                                        'Coordinates in decimal degrees, e.g. 32.5317, -117.0237.',
+                                        'Coordinates in decimal degrees, e.g. 21.4920, -104.8942.',
                                     )}
                                 </CardDescription>
                             </CardHeader>

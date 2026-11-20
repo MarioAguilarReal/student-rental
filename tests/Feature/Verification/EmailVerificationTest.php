@@ -28,16 +28,16 @@ it('moves the profiles to email verified once the link is clicked', function () 
 });
 
 it('links the client to the institution that owns the email domain, subdomains included', function (string $email) {
-    $institution = Institution::factory()->create(['email_domains' => ['uabc.edu.mx']]);
+    $institution = Institution::factory()->create(['email_domains' => ['uan.edu.mx']]);
     $user = userWithRole(Role::Client, ['email' => $email, 'email_verified_at' => null]);
 
     verifyEmailOf($user);
 
     expect($user->fresh()?->verificationProfile(VerificationKind::Client)?->institution_id)->toBe($institution->id);
-})->with(['ana@uabc.edu.mx', 'ana@alumnos.uabc.edu.mx']);
+})->with(['ana@uan.edu.mx', 'ana@alumnos.uan.edu.mx']);
 
 it('leaves the institution empty when no domain matches, so the client can pick it', function () {
-    Institution::factory()->create(['email_domains' => ['uabc.edu.mx']]);
+    Institution::factory()->create(['email_domains' => ['uan.edu.mx']]);
     $user = userWithRole(Role::Client, ['email' => 'erasmus@uni-heidelberg.de', 'email_verified_at' => null]);
 
     verifyEmailOf($user);
@@ -46,8 +46,8 @@ it('leaves the institution empty when no domain matches, so the client can pick 
 });
 
 it('ignores inactive institutions', function () {
-    Institution::factory()->inactive()->create(['email_domains' => ['uabc.edu.mx']]);
-    $user = userWithRole(Role::Client, ['email' => 'ana@uabc.edu.mx', 'email_verified_at' => null]);
+    Institution::factory()->inactive()->create(['email_domains' => ['uan.edu.mx']]);
+    $user = userWithRole(Role::Client, ['email' => 'ana@uan.edu.mx', 'email_verified_at' => null]);
 
     verifyEmailOf($user);
 

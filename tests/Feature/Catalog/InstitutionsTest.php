@@ -10,23 +10,23 @@ use App\Modules\Identity\Enums\Role;
 it('creates an institution with normalized email domains', function () {
     $this->actingAs(userWithRole(Role::SuperAdmin))
         ->post(route('catalog.institutions.store'), [
-            'name' => 'Universidad Autónoma de Baja California',
-            'acronym' => 'UABC',
-            'email_domains' => '@UABC.edu.mx, uabc.mx',
+            'name' => 'Universidad Autónoma de Nayarit',
+            'acronym' => 'UAN',
+            'email_domains' => '@UAN.edu.mx, uan.mx',
             'is_active' => true,
         ])
         ->assertSessionHasNoErrors();
 
-    expect(Institution::query()->sole()->email_domains)->toBe(['uabc.edu.mx', 'uabc.mx']);
+    expect(Institution::query()->sole()->email_domains)->toBe(['uan.edu.mx', 'uan.mx']);
 });
 
 it('does not allow the same domain in two institutions', function () {
-    Institution::factory()->create(['name' => 'UABC', 'email_domains' => ['uabc.edu.mx']]);
+    Institution::factory()->create(['name' => 'UAN', 'email_domains' => ['uan.edu.mx']]);
 
     $this->actingAs(userWithRole(Role::SuperAdmin))
         ->post(route('catalog.institutions.store'), [
             'name' => 'Otra',
-            'email_domains' => ['uabc.edu.mx'],
+            'email_domains' => ['uan.edu.mx'],
         ])
         ->assertSessionHasErrors('email_domains');
 
@@ -45,23 +45,23 @@ it('adds, updates and deletes campuses with coordinates', function () {
 
     $this->actingAs($superAdmin)
         ->post(route('catalog.institutions.campuses.store', $institution), [
-            'name' => 'Campus Tijuana',
-            'latitude' => 32.5317,
-            'longitude' => -117.0237,
+            'name' => 'Campus Tepic',
+            'latitude' => 21.4920,
+            'longitude' => -104.8942,
         ])
         ->assertSessionHasNoErrors();
 
     $campus = $institution->campuses()->sole();
-    expect((float) $campus->latitude)->toBe(32.5317);
+    expect((float) $campus->latitude)->toBe(21.4920);
 
     $this->actingAs($superAdmin)
         ->put(route('catalog.institutions.campuses.update', [$institution, $campus]), [
-            'name' => 'Campus Otay',
-            'latitude' => 32.53,
-            'longitude' => -116.96,
+            'name' => 'Campus Norte',
+            'latitude' => 21.51,
+            'longitude' => -104.89,
         ])
         ->assertSessionHasNoErrors();
-    expect($campus->fresh()?->name)->toBe('Campus Otay');
+    expect($campus->fresh()?->name)->toBe('Campus Norte');
 
     $this->actingAs($superAdmin)->delete(route('catalog.institutions.campuses.destroy', [$institution, $campus]));
     expect(Campus::query()->count())->toBe(0);

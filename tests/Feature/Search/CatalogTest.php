@@ -39,19 +39,19 @@ it('is public and uses the catalog page component', function () {
 });
 
 it('never exposes the exact location on the card', function () {
-    listedProperty(['latitude' => 32.531234, 'longitude' => -117.021987]);
+    listedProperty(['latitude' => 21.491234, 'longitude' => -104.894987]);
 
     $card = $this->get(route('home'))->viewData('page')['props']['listings']['data'][0];
 
-    expect($card['lat'])->toBe(Geo::approximate(32.531234))
-        ->and($card['lat'])->not->toBe(32.531234)
+    expect($card['lat'])->toBe(Geo::approximate(21.491234))
+        ->and($card['lat'])->not->toBe(21.491234)
         ->and($card)->not->toHaveKey('street');
 });
 
 it('filters by distance to a campus and shows it', function () {
-    $campus = Campus::factory()->create(['latitude' => 32.5300, 'longitude' => -117.0200]);
-    $near = listedProperty(['latitude' => 32.5350, 'longitude' => -117.0250]);
-    listedProperty(['latitude' => 32.6500, 'longitude' => -117.0200]); // ~13 km north
+    $campus = Campus::factory()->create(['latitude' => 21.4920, 'longitude' => -104.8942]);
+    $near = listedProperty(['latitude' => 21.4970, 'longitude' => -104.8992]);
+    listedProperty(['latitude' => 21.6120, 'longitude' => -104.8942]); // ~13 km north
 
     $props = $this->get(route('home', ['campus' => $campus->id, 'radius' => 5]))->viewData('page')['props'];
 

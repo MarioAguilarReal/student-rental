@@ -35,11 +35,11 @@ class PropertyFactory extends Factory
             'street' => 'Calle '.fake()->lastName(),
             'exterior_number' => (string) fake()->numberBetween(1, 9999),
             'neighborhood' => 'Colonia Centro',
-            'city' => 'Tijuana',
-            'state' => 'Baja California',
-            'postal_code' => '22000',
-            'latitude' => 32.5149,
-            'longitude' => -117.0382,
+            'city' => 'Tepic',
+            'state' => 'Nayarit',
+            'postal_code' => '63000',
+            'latitude' => 21.5095,
+            'longitude' => -104.8946,
         ]);
     }
 

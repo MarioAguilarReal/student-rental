@@ -84,8 +84,8 @@ it('sends an inspected property back to inspection when its location changes (RN
     $property->update(['status' => PropertyStatus::Published]);
 
     $this->actingAs($property->owner)->put(route('properties.location.update', $property), [
-        'street' => 'Otra calle', 'exterior_number' => '10', 'neighborhood' => 'Centro', 'city' => 'Tijuana',
-        'state' => 'Baja California', 'postal_code' => '22000', 'latitude' => 32.5, 'longitude' => -117.0,
+        'street' => 'Otra calle', 'exterior_number' => '10', 'neighborhood' => 'Centro', 'city' => 'Tepic',
+        'state' => 'Nayarit', 'postal_code' => '63000', 'latitude' => 21.5, 'longitude' => -104.9,
     ])->assertSessionHasNoErrors();
 
     expect($property->fresh()?->status)->toBe(PropertyStatus::PendingInspection);
