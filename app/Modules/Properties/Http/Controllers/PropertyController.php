@@ -4,6 +4,7 @@ namespace App\Modules\Properties\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Modules\Identity\Enums\Role;
 use App\Modules\Inspections\Presenters\InspectionPresenter;
 use App\Modules\Pricing\Presenters\PricingPresenter;
 use App\Modules\Properties\Actions\CreateProperty;
@@ -56,9 +57,15 @@ class PropertyController extends Controller
 
     public function create(Request $request): Response
     {
+        $canCreateOnBehalf = $request->user()?->can('createOnBehalf', Property::class) ?? false;
+
         return Inertia::render('properties/create', [
             ...$this->presenter->formOptions(),
-            'canCreateOnBehalf' => $request->user()?->can('createOnBehalf', Property::class) ?? false,
+            'canCreateOnBehalf' => $canCreateOnBehalf,
+            'owners' => $canCreateOnBehalf
+                ? User::role(Role::Owner->value)->orderBy('last_name')->orderBy('first_name')->get(['id', 'first_name', 'last_name', 'email'])
+                    ->map(fn (User $owner): array => ['value' => $owner->email, 'label' => "{$owner->name} ({$owner->email})"])
+                : [],
         ]);
     }
 
