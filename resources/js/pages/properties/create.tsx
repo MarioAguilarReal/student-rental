@@ -14,12 +14,14 @@ type Props = {
     propertyTypes: Option[];
     managementModes: Option[];
     canCreateOnBehalf: boolean;
+    owners: Option[];
 };
 
 export default function PropertyCreate({
     propertyTypes,
     managementModes,
     canCreateOnBehalf,
+    owners,
 }: Props) {
     const { t } = useTranslation();
 
@@ -43,16 +45,26 @@ export default function PropertyCreate({
                                         {canCreateOnBehalf && (
                                             <div className="grid gap-2">
                                                 <Label htmlFor="owner_email">
-                                                    {t('Owner email')}
+                                                    {t('Owner')}
                                                 </Label>
-                                                <Input
+                                                <NativeSelect
                                                     id="owner_email"
                                                     name="owner_email"
-                                                    type="email"
-                                                    placeholder={t(
-                                                        'Leave empty to register it as yours',
-                                                    )}
-                                                />
+                                                    required
+                                                    defaultValue=""
+                                                >
+                                                    <option value="" disabled>
+                                                        {t('Select an owner')}
+                                                    </option>
+                                                    {owners.map((owner) => (
+                                                        <option
+                                                            key={owner.value}
+                                                            value={owner.value}
+                                                        >
+                                                            {owner.label}
+                                                        </option>
+                                                    ))}
+                                                </NativeSelect>
                                                 <InputError
                                                     message={errors.owner_email}
                                                 />

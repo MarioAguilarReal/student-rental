@@ -39,6 +39,21 @@ it('lets an administrator create a property on behalf of an owner (RN-15)', func
     expect($property->owner_id)->toBe($owner->id)->and($property->created_by)->toBe($admin->id);
 });
 
+it('shows only owners to administrators creating a property', function () {
+    $owner = userWithRole(Role::Owner, ['first_name' => 'Ana', 'last_name' => 'Dueña', 'email' => 'duena@example.com']);
+    userWithRole(Role::Client);
+
+    $this->actingAs(userWithRole(Role::Admin))->get(route('properties.create'))
+        ->assertInertia(fn ($page) => $page
+            ->where('canCreateOnBehalf', true)
+            ->has('owners', 1)
+            ->where('owners.0.value', $owner->email)
+            ->where('owners.0.label', 'Ana Dueña (duena@example.com)'));
+
+    $this->actingAs($owner)->get(route('properties.create'))
+        ->assertInertia(fn ($page) => $page->where('canCreateOnBehalf', false)->has('owners', 0));
+});
+
 it('only creates properties on behalf of users who are owners', function () {
     userWithRole(Role::Client, ['email' => 'cliente@example.com']);
 
