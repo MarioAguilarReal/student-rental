@@ -3,7 +3,9 @@
 namespace App\Modules\Verification\Actions;
 
 use App\Models\User;
+use App\Modules\Shared\Enums\SystemParameter;
 use App\Modules\Shared\Exceptions\BusinessRuleViolation;
+use App\Modules\Shared\Support\Parameters;
 use App\Modules\Verification\Enums\CommunityType;
 use App\Modules\Verification\Enums\DocumentStatus;
 use App\Modules\Verification\Enums\DocumentType;
@@ -65,7 +67,7 @@ class ApproveVerification
             ->exists();
 
         if ($communityType === CommunityType::ExchangeStudent && $usedAcceptanceLetter && $profile->stay_ends_on) {
-            return $profile->stay_ends_on->min($today->addMonthsNoOverflow(12));
+            return $profile->stay_ends_on->min($today->addMonthsNoOverflow(Parameters::int(SystemParameter::VerificationExchangeMaxMonths)));
         }
 
         return $today->addMonthsNoOverflow($communityType->validityMonths());

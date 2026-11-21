@@ -99,3 +99,14 @@ Historias: HU-09.01 a HU-09.05 y HU-03.04 (gestión).
 - **Pantallas:** "Ingresos" del propietario (cobrado, comisión, neto, por cobrar y depósitos, por renta), "Finanzas" para administradores (comisiones, saldos por pagar a propietarios, depósitos, cargos vencidos y últimos pagos), "Comisiones" (tarifas con vigencia, D-79) y "Pagos de prueba" para el Super Admin.
 - **Notificaciones** (recibo, pago rechazado, cargo vencido) y **auditoría** de pagos, comisiones y escenarios.
 - **Fuera del MVP:** reembolsos (B-01), pasarela real (B-02), pagos a propietarios (B-03) y penalizaciones (B-11).
+
+## Iteración 8 — ✅ completada (2026-11-25)
+
+Historias: HU-10.01 (resto), HU-10.02, HU-11.01 y HU-03.05. HU-01.04 ya estaba desde la Iteración 1.
+
+- **Correos que faltaban** (HU-10.01): cargo próximo a vencer (D-84), inspección por vencer al propietario y a los administradores, resultado de inspección también a los administradores y renta confirmada también al propietario de una administrada.
+- **Centro de notificaciones** (HU-10.02): "Notificaciones" con contador de no leídas en el menú, filtro de no leídas, abrir (marca como leída y lleva a donde se actúa) y "Marcar todo como leído" (D-85).
+- **Bitácora** (HU-11.01, RN-90): filtros por área, quién y fechas; detalle con los valores registrados; solo lectura.
+- **Parámetros del sistema** (HU-03.05): plazos, vigencias, avisos y factores de precio con rangos, auditados con antes y después (D-81 a D-83). Los textos de la interfaz que mencionan los plazos usan el valor vigente.
+- **Revisión de seguridad** (D-86): rutas revisadas (todas las escrituras autorizan por ruta o en el controlador), cabeceras de seguridad, límites de frecuencia y cierre de sesión de cuentas suspendidas.
+- **Pendiente para producción** (D-44): definir infraestructura, `APP_DEBUG=false`, CSP, HSTS, cifrado de sesión, worker de colas y `schedule:run`, respaldos.

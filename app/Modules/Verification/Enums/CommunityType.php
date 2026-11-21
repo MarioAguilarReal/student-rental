@@ -3,6 +3,8 @@
 namespace App\Modules\Verification\Enums;
 
 use App\Modules\Shared\Enums\Concerns\HasLabel;
+use App\Modules\Shared\Enums\SystemParameter;
+use App\Modules\Shared\Support\Parameters;
 
 enum CommunityType: string
 {
@@ -19,8 +21,8 @@ enum CommunityType: string
     public function validityMonths(): int
     {
         return match ($this) {
-            self::Faculty => 12,
-            self::Student, self::ExchangeStudent => 6,
+            self::Faculty => Parameters::int(SystemParameter::VerificationFacultyMonths),
+            self::Student, self::ExchangeStudent => Parameters::int(SystemParameter::VerificationStudentMonths),
         };
     }
 }

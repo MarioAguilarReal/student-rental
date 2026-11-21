@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Audit\Enums\AuditLog;
 use App\Modules\Catalog\Enums\AmenityCategory;
 use App\Modules\Catalog\Enums\AmenityScope;
 use App\Modules\Identity\Enums\CohabitationGender;
@@ -28,6 +29,7 @@ use App\Modules\Properties\Enums\UnitStatus;
 use App\Modules\Properties\Enums\UnitTemplate;
 use App\Modules\Properties\Enums\UnitType;
 use App\Modules\Rentals\Enums\RentalStatus;
+use App\Modules\Shared\Enums\SystemParameter;
 use App\Modules\Verification\Enums\CommunityType;
 use App\Modules\Verification\Enums\DocumentStatus;
 use App\Modules\Verification\Enums\DocumentType;
@@ -49,7 +51,7 @@ it('has a Spanish label for every enum case shown to users', function () {
         ChecklistStatus::class, ChecklistCategory::class, ItemScope::class,
         InspectionType::class, InspectionStatus::class, InspectionResult::class, AnswerResult::class,
         RentalStatus::class, ChargeStatus::class, ChargeConcept::class, CohabitationGender::class,
-        PaymentAttemptStatus::class, LedgerAccount::class, SimulatedOutcome::class,
+        PaymentAttemptStatus::class, LedgerAccount::class, SimulatedOutcome::class, AuditLog::class, SystemParameter::class,
     ];
 
     foreach (collect($enums)->flatMap(fn (string $enum) => $enum::cases()) as $case) {

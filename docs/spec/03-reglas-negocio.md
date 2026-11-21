@@ -9,7 +9,7 @@ Reglas que el sistema **debe garantizar en el backend**, independientemente de l
 - **RN-03** Documentos requeridos:
     - Docente / Estudiante: **credencial vigente** de la institución.
     - Estudiante de intercambio: **credencial** de la institución destino **o carta de aceptación**, que debe indicar la fecha de fin de la estancia.
-- **RN-04** Vigencia de la verificación: estudiantes 6 meses, docentes 12 meses, intercambio hasta el fin de la estancia (máx. 12 meses). Al vencer pasa a `VENCIDO`: las rentas existentes continúan, pero no puede solicitar nuevas hasta renovar. Se avisa 15 días antes.
+- **RN-04** Vigencia de la verificación: estudiantes 6 meses, docentes 12 meses, intercambio hasta el fin de la estancia (máx. 12 meses). Al vencer pasa a `VENCIDO`: las rentas existentes continúan, pero no puede solicitar nuevas hasta renovar. Se avisa 15 días antes. Vigencias y aviso configurables (HU-03.05).
 - **RN-05** Se captura la **fecha de nacimiento** en el registro. La política para menores de edad está **pendiente** (D-21, B-19): por ahora no se restringe el registro.
 - **RN-06** Antes de **solicitar la inspección** de una propiedad, el propietario debe tener su identidad `VERIFICADA` (identificación oficial, revisada por un administrador) **y** adjuntar a esa propiedad un comprobante de propiedad o una autorización del dueño para rentar (D-20, D-49).
 - **RN-07** Los documentos de verificación son **privados**. Solo los ven el usuario que los subió y los administradores, y únicamente mediante URLs firmadas temporales.
@@ -70,8 +70,8 @@ Reglas que el sistema **debe garantizar en el backend**, independientemente de l
 ## Rentas
 
 - **RN-60** Toda renta requiere aprobación del **operador** de la propiedad (ver [roles](02-roles-permisos.md)).
-- **RN-61** Una solicitud sin respuesta en **72 h** pasa a `EXPIRADA` (D-22).
-- **RN-62** Después de aprobarse, el cliente tiene **48 h** para pagar el primer cargo. Si no paga, pasa a `EXPIRADA` y se libera la disponibilidad.
+- **RN-61** Una solicitud sin respuesta en **72 h** pasa a `EXPIRADA` (D-22). Plazo configurable (HU-03.05).
+- **RN-62** Después de aprobarse, el cliente tiene **48 h** para pagar el primer cargo. Si no paga, pasa a `EXPIRADA` y se libera la disponibilidad. Plazo configurable (HU-03.05).
 - **RN-63** La fecha de inicio debe ser **al menos el día siguiente** y **como máximo 12 meses** en el futuro.
 - **RN-64** Un cliente no puede tener **dos rentas bloqueantes traslapadas** (D-25).
 - **RN-65** Transiciones automáticas: `CONFIRMADA` → `ACTIVA` en `fecha_inicio`; `ACTIVA` → `FINALIZADA` en `fecha_fin`.
@@ -99,7 +99,7 @@ Reglas que el sistema **debe garantizar en el backend**, independientemente de l
 - **RN-82** Las plantillas de checklist están **versionadas**. Una inspección usa la versión vigente al crearse.
 - **RN-83** Si cualquier **ítem crítico** queda `NO_CUMPLE`, el resultado es forzosamente `RECHAZADA`.
 - **RN-84** Los ítems con `requiere_foto` necesitan al menos una foto para poder enviar la inspección.
-- **RN-85** Vigencia de **12 meses**. Se avisa 30 días antes y se genera una inspección `RENOVACION`. Al vencer sin renovarse, la propiedad pasa a `PAUSADA` (las rentas existentes continúan).
+- **RN-85** Vigencia de **12 meses**. Se avisa 30 días antes y se genera una inspección `RENOVACION`. Al vencer sin renovarse, la propiedad pasa a `PAUSADA` (las rentas existentes continúan). Vigencia y aviso configurables (HU-03.05).
 - **RN-86** Si la inspección es `RECHAZADA`, el propietario ve las observaciones, corrige y solicita una nueva inspección.
 - **RN-87** El checklist cubre la propiedad (áreas comunes) y **cada unidad rentable**.
 

@@ -37,7 +37,7 @@ class RentalFactory extends Factory
             'commission_bp' => 1000,
             'status' => RentalStatus::Requested,
             'rules_accepted_at' => now(),
-            'expires_at' => now()->addHours(Rental::REQUEST_HOURS),
+            'expires_at' => now()->addHours(Rental::requestHours()),
         ];
     }
 
@@ -51,8 +51,8 @@ class RentalFactory extends Factory
         return $this->state(fn () => [
             'status' => $status,
             'expires_at' => match ($status) {
-                RentalStatus::Requested => now()->addHours(Rental::REQUEST_HOURS),
-                RentalStatus::Approved => now()->addHours(Rental::PAYMENT_HOURS),
+                RentalStatus::Requested => now()->addHours(Rental::requestHours()),
+                RentalStatus::Approved => now()->addHours(Rental::paymentHours()),
                 default => null,
             },
             'decided_at' => $status === RentalStatus::Requested ? null : now(),

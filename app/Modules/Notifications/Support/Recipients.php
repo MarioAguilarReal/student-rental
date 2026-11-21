@@ -9,20 +9,29 @@ use App\Modules\Rentals\Models\Rental;
 use Illuminate\Support\Collection;
 
 /**
- * RN-60 / D-72: who operates a rental. The owner of a self-managed property, or every active
- * administrator for a managed one.
+ * Who receives what (HU-10.01).
  */
-final class RentalOperators
+final class Recipients
 {
     /**
+     * RN-60 / D-72: the owner of a self-managed property, or every active administrator.
+     *
      * @return Collection<int, User>
      */
-    public static function of(Rental $rental): Collection
+    public static function operatorsOf(Rental $rental): Collection
     {
         if ($rental->management_mode === ManagementMode::SelfManaged) {
             return collect([$rental->property->owner]);
         }
 
+        return self::admins();
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public static function admins(): Collection
+    {
         return User::role(Role::Admin->value)->whereNull('suspended_at')->get()->toBase();
     }
 }

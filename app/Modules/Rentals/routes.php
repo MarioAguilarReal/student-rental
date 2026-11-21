@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // HU-08.01 / HU-08.04: clients
-    Route::post('stays/{property}/rentals', [ClientRentalsController::class, 'store'])->can('create', Rental::class)->name('rentals.store');
+    Route::post('stays/{property}/rentals', [ClientRentalsController::class, 'store'])->can('create', Rental::class)->middleware('throttle:sensitive')->name('rentals.store');
     Route::get('rentals', [ClientRentalsController::class, 'index'])->can('create', Rental::class)->name('rentals.index');
 
     // HU-08.05: owners and administrators

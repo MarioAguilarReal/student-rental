@@ -2,6 +2,7 @@
 
 namespace App\Modules\Audit\Listeners;
 
+use App\Modules\Catalog\Events\SystemParametersUpdated;
 use App\Modules\Identity\Events\InternalRolesChanged;
 use App\Modules\Identity\Events\UserReactivated;
 use App\Modules\Identity\Events\UserSuspended;
@@ -210,6 +211,14 @@ class RecordAuditTrail
             ->event('simulation_configured')
             ->withProperties(['outcome' => $event->setting->outcome->value, 'delay_seconds' => $event->setting->delay_seconds])
             ->log('Payment simulation configured');
+    }
+
+    public function systemParametersUpdated(SystemParametersUpdated $event): void
+    {
+        activity('settings')->causedBy($event->actor)
+            ->event('parameters_updated')
+            ->withProperties(['before' => $event->before, 'after' => $event->after])
+            ->log('System parameters updated');
     }
 
     /**

@@ -5,6 +5,7 @@ import FilterChips from '@/components/filter-chips';
 import Page from '@/components/page';
 import Pagination from '@/components/pagination';
 import RentalList from '@/components/rentals/rental-list';
+import { useDeadlines } from '@/hooks/use-deadlines';
 import { useTranslation } from '@/lib/i18n';
 import { manage } from '@/routes/rentals';
 import type { Option, Paginated, RentalSummary } from '@/types';
@@ -26,6 +27,7 @@ export default function ManageRentals({
     statusOptions,
 }: Props) {
     const { t } = useTranslation();
+    const { requestHours, paymentHours } = useDeadlines();
 
     return (
         <>
@@ -33,7 +35,8 @@ export default function ManageRentals({
             <Page
                 title={t('Rentals')}
                 description={t(
-                    'Answer each request within 72 hours. Approving gives the client 48 hours to pay.',
+                    'Answer each request within :request hours. Approving gives the client :payment hours to pay.',
+                    { request: requestHours, payment: paymentHours },
                 )}
             >
                 <div className="mb-6">

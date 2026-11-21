@@ -43,6 +43,7 @@ El sufijo **(propio)** significa que el permiso solo aplica a recursos del usuar
 | `payments.simulation.configure`                                          |                 |                      |                |                                 |     ✅      |
 | `catalog.manage` (instituciones, amenidades, reglas de casa, checklists) |                 |                      |                |                                 |     ✅      |
 | `payments.commission_rules.manage`                                       |                 |                      |                |                                 |     ✅      |
+| `system.parameters.manage` (plazos, vigencias y factores, HU-03.05)      |                 |                      |                |                                 |     ✅      |
 | `users.roles.assign`                                                     |                 |                      |                |                                 |     ✅      |
 | `users.suspend`                                                          |                 |                      |                |               ✅                |     ✅      |
 | `audit.view`                                                             |                 |                      |                |               ✅                |     ✅      |

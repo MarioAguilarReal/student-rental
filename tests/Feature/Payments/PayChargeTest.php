@@ -59,6 +59,15 @@ it('confirms the rental when the client pays the first charge (RN-71)', function
     $this->assertDatabaseHas('activity_log', ['log_name' => 'payment', 'event' => 'paid', 'subject_id' => $charge->id]);
 });
 
+it('tells the owner of a managed property that the rental is confirmed (HU-10.01)', function () {
+    $admin = userWithRole(Role::Admin);
+    $rental = approvedRental(['management_mode' => ManagementMode::Managed], ['commission_bp' => 2000]);
+
+    payCharge($rental, firstCharge($rental));
+
+    Notification::assertSentTo([$rental->client, $rental->property->owner, $admin], PlatformMessage::class, fn (PlatformMessage $message) => $message->type === 'rental.confirmed');
+});
+
 it('posts a balanced transaction: commission, owner and deposit (RN-73, RN-51, RN-52)', function (ManagementMode $mode, int $basisPoints, int $commission) {
     $rental = approvedRental(['management_mode' => $mode], ['commission_bp' => $basisPoints]);
 

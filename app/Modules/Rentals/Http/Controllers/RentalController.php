@@ -45,7 +45,7 @@ class RentalController extends Controller
         $operator = $request->user();
         $approve->handle($operator, $rental);
 
-        Toast::success(__('Request approved. The client has 48 hours to pay the first charge.'));
+        Toast::success(__('Request approved. The client has :hours hours to pay the first charge.', ['hours' => Rental::paymentHours()]));
 
         return back();
     }

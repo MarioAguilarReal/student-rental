@@ -3,6 +3,7 @@ import {
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
+    SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
@@ -37,6 +38,11 @@ export function NavMain({
                                 <span>{t(item.title)}</span>
                             </Link>
                         </SidebarMenuButton>
+                        {item.badge ? (
+                            <SidebarMenuBadge className="tabular">
+                                {item.badge}
+                            </SidebarMenuBadge>
+                        ) : null}
                     </SidebarMenuItem>
                 ))}
             </SidebarMenu>

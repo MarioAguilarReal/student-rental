@@ -21,6 +21,7 @@ beforeEach(function () {
     Notification::fake();
     $this->inspection = propertyAwaitingInspection();
     $this->inspector = userWithRole(Role::Inspector);
+    $this->admin = userWithRole(Role::Admin);
     $this->inspection->forceFill(['status' => InspectionStatus::Assigned, 'inspector_id' => $this->inspector->id, 'scheduled_for' => now()->toDateString()])->save();
 });
 
@@ -59,6 +60,7 @@ it('starts, answers with evidence and approves; the property becomes approved fo
         ->and($property?->inspection_valid_until?->toDateString())->toBe(now()->addMonthsNoOverflow(12)->toDateString())
         ->and(InspectionAnswer::query()->whereHas('media')->exists())->toBeTrue();
     Notification::assertSentTo($property->owner, PlatformMessage::class, fn (PlatformMessage $message) => $message->type === 'inspection.approved');
+    Notification::assertSentTo($this->admin, PlatformMessage::class, fn (PlatformMessage $message) => $message->type === 'inspection.approved');
 });
 
 it('answers unit items once per rentable space (RN-87)', function () {

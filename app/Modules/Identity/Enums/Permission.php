@@ -50,6 +50,7 @@ enum Permission: string
 
     // Platform
     case CatalogManage = 'catalog.manage';
+    case SystemParametersManage = 'system.parameters.manage';
     case UsersRolesAssign = 'users.roles.assign';
     case UsersSuspend = 'users.suspend';
     case AuditView = 'audit.view';

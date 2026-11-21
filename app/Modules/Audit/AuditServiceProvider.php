@@ -3,6 +3,7 @@
 namespace App\Modules\Audit;
 
 use App\Modules\Audit\Listeners\RecordAuditTrail;
+use App\Modules\Catalog\Events\SystemParametersUpdated;
 use App\Modules\Identity\Events\InternalRolesChanged;
 use App\Modules\Identity\Events\UserReactivated;
 use App\Modules\Identity\Events\UserSuspended;
@@ -66,5 +67,6 @@ final class AuditServiceProvider extends ModuleServiceProvider
         CommissionRuleScheduled::class => [[RecordAuditTrail::class, 'commissionRuleScheduled']],
         CommissionRuleRemoved::class => [[RecordAuditTrail::class, 'commissionRuleRemoved']],
         PaymentSimulationConfigured::class => [[RecordAuditTrail::class, 'paymentSimulationConfigured']],
+        SystemParametersUpdated::class => [[RecordAuditTrail::class, 'systemParametersUpdated']],
     ];
 }

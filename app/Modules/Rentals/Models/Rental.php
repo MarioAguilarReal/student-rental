@@ -9,7 +9,9 @@ use App\Modules\Properties\Enums\ManagementMode;
 use App\Modules\Properties\Models\Property;
 use App\Modules\Properties\Models\Unit;
 use App\Modules\Rentals\Enums\RentalStatus;
+use App\Modules\Shared\Enums\SystemParameter;
 use App\Modules\Shared\Money;
+use App\Modules\Shared\Support\Parameters;
 use Carbon\CarbonImmutable;
 use Database\Factories\RentalFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -60,11 +62,21 @@ class Rental extends Model
     /** @use HasFactory<RentalFactory> */
     use HasFactory;
 
-    /** RN-61 */
-    public const REQUEST_HOURS = 72;
+    /**
+     * RN-61: hours the operator has to answer a request (HU-03.05).
+     */
+    public static function requestHours(): int
+    {
+        return Parameters::int(SystemParameter::RentalRequestHours);
+    }
 
-    /** RN-62 */
-    public const PAYMENT_HOURS = 48;
+    /**
+     * RN-62: hours the client has to pay the first charge once approved (HU-03.05).
+     */
+    public static function paymentHours(): int
+    {
+        return Parameters::int(SystemParameter::RentalPaymentHours);
+    }
 
     protected $guarded = ['id'];
 

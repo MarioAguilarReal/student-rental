@@ -18,7 +18,7 @@ it('expires requests without an answer after 72 hours and tells both sides', fun
     $property = listedProperty(['owner_id' => verifiedOwner()->id]);
     $rental = Rental::factory()->create(['unit_id' => $property->units()->firstOrFail()->id]);
 
-    $this->travel(Rental::REQUEST_HOURS)->hours();
+    $this->travel(Rental::requestHours())->hours();
     $this->travel(1)->minutes();
     $expired = app(ExpireRentals::class)->handle();
 
@@ -31,7 +31,7 @@ it('expires requests without an answer after 72 hours and tells both sides', fun
 it('leaves requests that are still on time', function () {
     $rental = Rental::factory()->create();
 
-    $this->travel(Rental::REQUEST_HOURS - 1)->hours();
+    $this->travel(Rental::requestHours() - 1)->hours();
 
     expect(app(ExpireRentals::class)->handle())->toBe(0)
         ->and($rental->fresh()?->status)->toBe(RentalStatus::Requested);
@@ -41,7 +41,7 @@ it('expires unpaid approvals after 48 hours, cancels their charges and frees the
     $rental = Rental::factory()->status(RentalStatus::Approved)->create();
     app(GenerateCharges::class)->handle($rental);
 
-    $this->travel(Rental::PAYMENT_HOURS + 1)->hours();
+    $this->travel(Rental::paymentHours() + 1)->hours();
     app(ExpireRentals::class)->handle();
 
     expect($rental->fresh()?->status)->toBe(RentalStatus::Expired)

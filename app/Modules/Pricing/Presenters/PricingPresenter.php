@@ -3,6 +3,7 @@
 namespace App\Modules\Pricing\Presenters;
 
 use App\Modules\Payments\Contracts\CommissionRates;
+use App\Modules\Pricing\Actions\SuggestPrices;
 use App\Modules\Pricing\Enums\BlockReason;
 use App\Modules\Pricing\Enums\RatePeriod;
 use App\Modules\Pricing\Models\AvailabilityBlock;
@@ -58,7 +59,7 @@ class PricingPresenter
                     'note' => $block->note,
                 ]),
             'commission_bp' => $this->commissionRates->basisPointsFor($property->management_mode),
-            'suggestions' => config('pricing.suggestions'),
+            'suggestions' => SuggestPrices::config(),
             'periods' => array_map(fn (RatePeriod $period): array => [
                 'value' => $period->value,
                 'label' => $period->label(),

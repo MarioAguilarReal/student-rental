@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useDeadlines } from '@/hooks/use-deadlines';
 import { useTranslation } from '@/lib/i18n';
 import { formatMoney } from '@/lib/money';
 import { approve, cancel, index, manage, reject } from '@/routes/rentals';
@@ -50,6 +51,7 @@ export default function RentalShow({
     canCancel,
 }: Props) {
     const { t } = useTranslation();
+    const { paymentHours } = useDeadlines();
     const periodWord: Record<string, string> = {
         weekly: t('weeks'),
         monthly: t('months'),
@@ -191,7 +193,8 @@ export default function RentalShow({
                         <PageSection
                             title={t('Your answer')}
                             description={t(
-                                'Approving holds the dates for 48 hours while the client pays the first charge.',
+                                'Approving holds the dates for :hours hours while the client pays the first charge.',
+                                { hours: paymentHours },
                             )}
                         >
                             <div className="grid gap-4 md:grid-cols-2">

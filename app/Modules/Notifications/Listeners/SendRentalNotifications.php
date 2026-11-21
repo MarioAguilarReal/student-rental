@@ -4,7 +4,7 @@ namespace App\Modules\Notifications\Listeners;
 
 use App\Models\User;
 use App\Modules\Notifications\Messages\PlatformMessage;
-use App\Modules\Notifications\Support\RentalOperators;
+use App\Modules\Notifications\Support\Recipients;
 use App\Modules\Rentals\Events\RentalApproved;
 use App\Modules\Rentals\Events\RentalCancelled;
 use App\Modules\Rentals\Events\RentalConfirmed;
@@ -29,8 +29,9 @@ class SendRentalNotifications
             $rental,
             'rental.requested',
             'New rental request for :property',
-            ':client wants :unit from :start to :end. Answer within 72 hours.',
+            ':client wants :unit from :start to :end. Answer within :hours hours.',
             'Review request',
+            ['hours' => (string) Rental::requestHours()],
         ));
     }
 
@@ -42,8 +43,9 @@ class SendRentalNotifications
             $rental,
             'rental.approved',
             'Your request for :property was approved',
-            'Pay the first charge within 48 hours to confirm your rental.',
+            'Pay the first charge within :hours hours to confirm your rental.',
             'View rental',
+            ['hours' => (string) Rental::paymentHours()],
         ));
     }
 
@@ -78,7 +80,9 @@ class SendRentalNotifications
     {
         $rental = $event->rental;
 
-        Notification::send($this->operators($rental)->push($rental->client), $this->message(
+        $recipients = $this->operators($rental)->push($rental->client)->push($rental->property->owner)->unique('id');
+
+        Notification::send($recipients, $this->message(
             $rental,
             'rental.confirmed',
             'Rental :folio is confirmed',
@@ -107,7 +111,7 @@ class SendRentalNotifications
      */
     private function operators(Rental $rental): Collection
     {
-        return RentalOperators::of($rental);
+        return Recipients::operatorsOf($rental);
     }
 
     /**

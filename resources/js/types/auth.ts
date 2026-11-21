@@ -17,6 +17,7 @@ export type Auth = {
     user: User;
     roles: string[];
     permissions: string[];
+    unreadNotifications: number;
 };
 
 export type Passkey = {

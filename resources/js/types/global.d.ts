@@ -12,6 +12,7 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            deadlines: { request_hours: number; payment_hours: number };
             locale: string;
             translations: Record<string, string>;
             [key: string]: unknown;

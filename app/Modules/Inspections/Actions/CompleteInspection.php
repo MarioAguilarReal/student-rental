@@ -10,7 +10,9 @@ use App\Modules\Inspections\Events\InspectionCompleted;
 use App\Modules\Inspections\Models\Inspection;
 use App\Modules\Inspections\Models\InspectionAnswer;
 use App\Modules\Properties\Actions\RecordInspectionOutcome;
+use App\Modules\Shared\Enums\SystemParameter;
 use App\Modules\Shared\Exceptions\BusinessRuleViolation;
+use App\Modules\Shared\Support\Parameters;
 use App\Modules\Shared\Support\Text;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +72,7 @@ class CompleteInspection
         }
 
         DB::transaction(function () use ($inspection, $result, $observations) {
-            $validUntil = $result->approves() ? CarbonImmutable::today()->addMonthsNoOverflow(Inspection::VALIDITY_MONTHS) : null;
+            $validUntil = $result->approves() ? CarbonImmutable::today()->addMonthsNoOverflow(Parameters::int(SystemParameter::InspectionValidityMonths)) : null;
 
             $inspection->forceFill([
                 'status' => InspectionStatus::Completed,

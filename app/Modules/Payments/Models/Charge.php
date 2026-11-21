@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property CarbonImmutable $due_on
  * @property ChargeStatus $status
  * @property CarbonImmutable|null $paid_at
+ * @property CarbonImmutable|null $reminder_sent_at
  * @property-read Rental $rental
  * @property-read Collection<int, PaymentAttempt> $attempts
  */
@@ -42,6 +43,7 @@ class Charge extends Model
             'deposit_minor' => 'integer',
             'due_on' => 'immutable_date',
             'paid_at' => 'immutable_datetime',
+            'reminder_sent_at' => 'immutable_datetime',
         ];
     }
 

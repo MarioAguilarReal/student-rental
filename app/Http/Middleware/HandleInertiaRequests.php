@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Modules\Shared\Enums\SystemParameter;
+use App\Modules\Shared\Support\Parameters;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Middleware;
@@ -44,6 +46,12 @@ class HandleInertiaRequests extends Middleware
                 // Lets the UI show only what the user may do; the backend still authorizes every request.
                 'roles' => fn (): array => $request->user()?->getRoleNames()->values()->all() ?? [],
                 'permissions' => fn (): array => $request->user()?->getAllPermissions()->pluck('name')->values()->all() ?? [],
+                'unreadNotifications' => fn (): int => $request->user()?->unreadNotifications()->count() ?? 0,
+            ],
+            // HU-03.05: deadlines quoted in the interface follow the system parameters.
+            'deadlines' => fn (): array => [
+                'request_hours' => Parameters::int(SystemParameter::RentalRequestHours),
+                'payment_hours' => Parameters::int(SystemParameter::RentalPaymentHours),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'locale' => app()->getLocale(),

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->group(function () {
     // HU-09.01: clients pay their own charges
     Route::post('rentals/{rental}/charges/{charge}/pay', [ChargePaymentController::class, 'store'])
-        ->scopeBindings()->can('pay', 'charge')->name('charges.pay');
+        ->scopeBindings()->can('pay', 'charge')->middleware('throttle:sensitive')->name('charges.pay');
 
     // HU-09.03: owners see their income
     Route::get('income', [BalanceController::class, 'show'])

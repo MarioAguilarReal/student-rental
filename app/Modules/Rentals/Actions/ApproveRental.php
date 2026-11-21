@@ -63,7 +63,7 @@ class ApproveRental
                     'status' => RentalStatus::Approved,
                     'decided_by' => $operator->id,
                     'decided_at' => now(),
-                    'expires_at' => now()->addHours(Rental::PAYMENT_HOURS),
+                    'expires_at' => now()->addHours(Rental::paymentHours()),
                 ])->save();
 
                 $this->generateCharges->handle($rental);

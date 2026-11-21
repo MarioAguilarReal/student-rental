@@ -3,7 +3,8 @@
 namespace App\Modules\Notifications\Listeners;
 
 use App\Modules\Notifications\Messages\PlatformMessage;
-use App\Modules\Notifications\Support\RentalOperators;
+use App\Modules\Notifications\Support\Recipients;
+use App\Modules\Payments\Events\ChargeDueSoon;
 use App\Modules\Payments\Events\ChargeOverdue;
 use App\Modules\Payments\Events\ChargePaid;
 use App\Modules\Payments\Events\ChargePaymentFailed;
@@ -12,8 +13,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Number;
 
 /**
- * HU-10.01 for payments: the client's receipt and declined payments (HU-09.01), and overdue
- * charges to the client and the operator (RN-74).
+ * HU-10.01 for payments: the client's receipt, declined payments (HU-09.01) and charges due
+ * soon, and overdue charges to the client and the operator (RN-74).
  */
 class SendPaymentNotifications
 {
@@ -40,11 +41,22 @@ class SendPaymentNotifications
         ));
     }
 
+    public function dueSoon(ChargeDueSoon $event): void
+    {
+        $event->charge->rental->client->notify($this->message(
+            $event->charge,
+            'charge.due_soon',
+            'Charge :number of rental :folio is due on :due',
+            'Remember to pay :amount before :due.',
+            'Pay now',
+        ));
+    }
+
     public function overdue(ChargeOverdue $event): void
     {
         $rental = $event->charge->rental;
 
-        Notification::send(RentalOperators::of($rental)->push($rental->client)->unique('id'), $this->message(
+        Notification::send(Recipients::operatorsOf($rental)->push($rental->client)->unique('id'), $this->message(
             $event->charge,
             'charge.overdue',
             'Charge :number of rental :folio is overdue',

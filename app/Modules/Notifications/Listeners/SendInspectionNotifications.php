@@ -4,10 +4,14 @@ namespace App\Modules\Notifications\Listeners;
 
 use App\Modules\Inspections\Events\InspectionAssigned;
 use App\Modules\Inspections\Events\InspectionCompleted;
+use App\Modules\Inspections\Events\InspectionRenewalOpened;
 use App\Modules\Notifications\Messages\PlatformMessage;
+use App\Modules\Notifications\Support\Recipients;
+use Illuminate\Support\Facades\Notification;
 
 /**
- * HU-10.01: inspection assigned → inspector and owner; inspection completed → owner.
+ * HU-10.01: inspection assigned → inspector and owner; completed → owner and administrators;
+ * about to expire (renewal opened) → owner and administrators.
  */
 class SendInspectionNotifications
 {
@@ -49,6 +53,40 @@ class SendInspectionNotifications
             'View result',
             route('properties.edit', $property, absolute: false).'#publication',
             ['property' => $property->title],
+        ));
+
+        Notification::send(Recipients::admins(), new PlatformMessage(
+            $approved ? 'inspection.approved' : 'inspection.rejected',
+            $approved ? ':property passed its inspection' : ':property did not pass its inspection',
+            'Result recorded by :inspector.',
+            'View inspection',
+            route('inspections.queue.show', $inspection, absolute: false),
+            ['property' => $property->title, 'inspector' => (string) $inspection->inspector?->name],
+        ));
+    }
+
+    public function renewalOpened(InspectionRenewalOpened $event): void
+    {
+        $inspection = $event->inspection;
+        $property = $inspection->property;
+        $replace = ['property' => $property->title, 'date' => (string) $property->inspection_valid_until?->toDateString()];
+
+        $property->owner->notify(new PlatformMessage(
+            'inspection.expiring',
+            'The inspection of :property expires on :date',
+            'We opened its renewal. An administrator will schedule the visit; if it is not approved in time, the property leaves the catalog.',
+            'View property',
+            route('properties.edit', $property, absolute: false).'#publication',
+            $replace,
+        ));
+
+        Notification::send(Recipients::admins(), new PlatformMessage(
+            'inspection.expiring',
+            'The inspection of :property expires on :date',
+            'A renewal is waiting for an inspector and a date.',
+            'Assign inspection',
+            route('inspections.queue.show', $inspection, absolute: false),
+            $replace,
         ));
     }
 }

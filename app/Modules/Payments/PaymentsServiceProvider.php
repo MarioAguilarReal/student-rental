@@ -3,6 +3,7 @@
 namespace App\Modules\Payments;
 
 use App\Modules\Payments\Actions\MarkOverdueCharges;
+use App\Modules\Payments\Actions\RemindUpcomingCharges;
 use App\Modules\Payments\Contracts\CommissionRates;
 use App\Modules\Payments\Contracts\PaymentGateway;
 use App\Modules\Payments\Models\Charge;
@@ -27,11 +28,14 @@ final class PaymentsServiceProvider extends ModuleServiceProvider
     }
 
     /**
-     * RN-74.
+     * RN-74 and HU-10.01 (charge due soon).
      */
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(fn () => app(MarkOverdueCharges::class)->handle())
             ->name('payments:overdue')->dailyAt('00:10')->withoutOverlapping();
+
+        $schedule->call(fn () => app(RemindUpcomingCharges::class)->handle())
+            ->name('payments:remind')->dailyAt('09:00')->withoutOverlapping();
     }
 }

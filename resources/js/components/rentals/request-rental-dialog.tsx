@@ -15,6 +15,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { NativeSelect } from '@/components/ui/native-select';
 import { Textarea } from '@/components/ui/textarea';
+import { useDeadlines } from '@/hooks/use-deadlines';
 import { useTranslation } from '@/lib/i18n';
 import { formatMoney } from '@/lib/money';
 import { store } from '@/routes/rentals';
@@ -42,6 +43,7 @@ export default function RequestRentalDialog({
     genderOptions: Option[];
 }) {
     const { t } = useTranslation();
+    const { requestHours, paymentHours } = useDeadlines();
     const [open, setOpen] = useState(false);
     const form = useForm({
         unit_id: quote.unit_id,
@@ -79,7 +81,8 @@ export default function RequestRentalDialog({
                         </DialogTitle>
                         <DialogDescription>
                             {t(
-                                'The host has 72 hours to answer. Nothing is charged until they approve.',
+                                'The host has :hours hours to answer. Nothing is charged until they approve.',
+                                { hours: requestHours },
                             )}
                         </DialogDescription>
                     </DialogHeader>
@@ -112,7 +115,10 @@ export default function RequestRentalDialog({
                                     >
                                         <span className="text-muted-foreground">
                                             {charge.due_on ??
-                                                t('On approval (48 h to pay)')}
+                                                t(
+                                                    'On approval (:hours h to pay)',
+                                                    { hours: paymentHours },
+                                                )}
                                             {charge.deposit_minor > 0 &&
                                                 ` · ${t('includes deposit')}`}
                                         </span>

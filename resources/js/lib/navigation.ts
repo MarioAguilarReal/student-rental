@@ -1,8 +1,11 @@
 import {
     BadgeCheck,
     Banknote,
+    Bell,
     Building2,
     CreditCard,
+    SlidersHorizontal,
+    ScrollText,
     Landmark,
     Percent,
     CalendarDays,
@@ -17,8 +20,10 @@ import {
     LayoutGrid,
     Users,
 } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
 import { useCan } from '@/lib/permissions';
 import { dashboard } from '@/routes';
+import { index as auditIndex } from '@/routes/audit';
 import { index as amenitiesIndex } from '@/routes/catalog/amenities';
 import { index as houseRulesIndex } from '@/routes/catalog/house-rules';
 import { index as institutionsIndex } from '@/routes/catalog/institutions';
@@ -28,6 +33,8 @@ import { edit as paymentSimulation } from '@/routes/payment-simulation';
 import { balance, finance } from '@/routes/payments';
 import { agenda as inspectionAgenda } from '@/routes/inspections';
 import { index as inspectionQueue } from '@/routes/inspections/queue';
+import { index as notificationsIndex } from '@/routes/notifications';
+import { edit as parametersEdit } from '@/routes/parameters';
 import { index as myProperties } from '@/routes/properties';
 import { index as myRentals, manage as manageRentals } from '@/routes/rentals';
 import { index as allProperties } from '@/routes/properties/admin';
@@ -40,6 +47,7 @@ type GuardedNavItem = NavItem & { permissions?: string[] };
 
 const mainItems: GuardedNavItem[] = [
     { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+    { title: 'Notifications', href: notificationsIndex(), icon: Bell },
     {
         title: 'My verification',
         href: verificationShow(),
@@ -110,6 +118,12 @@ const adminItems: GuardedNavItem[] = [
         permissions: ['users.suspend', 'users.roles.assign'],
     },
     {
+        title: 'Audit log',
+        href: auditIndex(),
+        icon: ScrollText,
+        permissions: ['audit.view'],
+    },
+    {
         title: 'Institutions',
         href: institutionsIndex(),
         icon: Building2,
@@ -140,6 +154,12 @@ const adminItems: GuardedNavItem[] = [
         permissions: ['payments.commission_rules.manage'],
     },
     {
+        title: 'System parameters',
+        href: parametersEdit(),
+        icon: SlidersHorizontal,
+        permissions: ['system.parameters.manage'],
+    },
+    {
         title: 'Test payments',
         href: paymentSimulation(),
         icon: CreditCard,
@@ -152,8 +172,15 @@ const adminItems: GuardedNavItem[] = [
  */
 export function useNavItems(): { main: NavItem[]; admin: NavItem[] } {
     const can = useCan();
+    const unread = usePage().props.auth.unreadNotifications ?? 0;
     const visible = (items: GuardedNavItem[]) =>
-        items.filter((item) => !item.permissions || item.permissions.some(can));
+        items
+            .filter((item) => !item.permissions || item.permissions.some(can))
+            .map((item) =>
+                item.title === 'Notifications'
+                    ? { ...item, badge: unread }
+                    : item,
+            );
 
     return { main: visible(mainItems), admin: visible(adminItems) };
 }

@@ -141,7 +141,7 @@ class RequestRental
                 'status' => RentalStatus::Requested,
                 'client_message' => filled($message) ? trim((string) $message) : null,
                 'rules_accepted_at' => now(),
-                'expires_at' => now()->addHours(Rental::REQUEST_HOURS),
+                'expires_at' => now()->addHours(Rental::requestHours()),
             ]);
 
             $rental->forceFill(['folio' => sprintf('R-%d-%06d', $rental->created_at->year, $rental->id)])->save();

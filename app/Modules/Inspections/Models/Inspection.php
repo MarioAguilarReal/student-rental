@@ -39,8 +39,6 @@ class Inspection extends Model
     /** @use HasFactory<InspectionFactory> */
     use HasFactory;
 
-    public const VALIDITY_MONTHS = 12;
-
     protected $guarded = ['id'];
 
     protected function casts(): array

@@ -57,7 +57,7 @@ class ClientRentalsController extends Controller
             $gender,
         );
 
-        Toast::success(__('Request sent. The host has 72 hours to answer.'));
+        Toast::success(__('Request sent. The host has :hours hours to answer.', ['hours' => Rental::requestHours()]));
 
         return to_route('rentals.show', $rental);
     }
