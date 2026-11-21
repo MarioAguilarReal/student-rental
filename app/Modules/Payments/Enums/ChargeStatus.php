@@ -6,8 +6,9 @@ use App\Modules\Shared\Enums\Concerns\HasLabel;
 use App\Modules\Shared\Enums\Concerns\HasTransitions;
 
 /**
- * A scheduled charge (RN-70). Paying, failing and going overdue arrive in Iteración 7;
- * cancelling happens when its rental expires or is cancelled (RN-62, RN-66).
+ * A scheduled charge (RN-70). It is paid by the client (HU-09.01), fails when the gateway
+ * declines (and can be retried), goes overdue after its due date (RN-74) and is cancelled
+ * when its rental expires or is cancelled (RN-62, RN-66).
  */
 enum ChargeStatus: string
 {

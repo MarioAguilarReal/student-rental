@@ -6,3 +6,4 @@ export type * from './properties';
 export type * from './inspections';
 export type * from './stays';
 export type * from './rentals';
+export type * from './payments';

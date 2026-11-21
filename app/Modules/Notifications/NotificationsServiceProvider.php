@@ -5,8 +5,12 @@ namespace App\Modules\Notifications;
 use App\Modules\Inspections\Events\InspectionAssigned;
 use App\Modules\Inspections\Events\InspectionCompleted;
 use App\Modules\Notifications\Listeners\SendInspectionNotifications;
+use App\Modules\Notifications\Listeners\SendPaymentNotifications;
 use App\Modules\Notifications\Listeners\SendRentalNotifications;
 use App\Modules\Notifications\Listeners\SendVerificationNotifications;
+use App\Modules\Payments\Events\ChargeOverdue;
+use App\Modules\Payments\Events\ChargePaid;
+use App\Modules\Payments\Events\ChargePaymentFailed;
 use App\Modules\Rentals\Events\RentalApproved;
 use App\Modules\Rentals\Events\RentalCancelled;
 use App\Modules\Rentals\Events\RentalConfirmed;
@@ -34,5 +38,8 @@ final class NotificationsServiceProvider extends ModuleServiceProvider
         RentalExpired::class => [[SendRentalNotifications::class, 'expired']],
         RentalConfirmed::class => [[SendRentalNotifications::class, 'confirmed']],
         RentalCancelled::class => [[SendRentalNotifications::class, 'cancelled']],
+        ChargePaid::class => [[SendPaymentNotifications::class, 'paid']],
+        ChargePaymentFailed::class => [[SendPaymentNotifications::class, 'failed']],
+        ChargeOverdue::class => [[SendPaymentNotifications::class, 'overdue']],
     ];
 }

@@ -13,6 +13,8 @@ use App\Modules\Properties\Enums\PropertyStatus;
 use App\Modules\Properties\Enums\UnitType;
 use App\Modules\Properties\Models\Property;
 use App\Modules\Properties\Models\Unit;
+use App\Modules\Rentals\Actions\ApproveRental;
+use App\Modules\Rentals\Models\Rental;
 use App\Modules\Verification\Enums\CommunityType;
 use App\Modules\Verification\Enums\VerificationStatus;
 use Database\Seeders\ChecklistSeeder;
@@ -179,4 +181,23 @@ function rentalRequest(Property $property, array $overrides = []): array
         'message' => 'Hola, estudio en la facultad.',
         ...$overrides,
     ];
+}
+
+/**
+ * A rental approved by its owner, with its charge schedule (RN-70) and 48 h to pay (RN-62).
+ *
+ * @param  array<string, mixed>  $property
+ * @param  array<string, mixed>  $attributes
+ */
+function approvedRental(array $property = [], array $attributes = []): Rental
+{
+    $listed = listedProperty(['owner_id' => verifiedOwner()->id, ...$property]);
+    $rental = Rental::factory()->create([
+        'unit_id' => $listed->units()->firstOrFail()->id,
+        'client_id' => verifiedClient()->id,
+        'management_mode' => $listed->management_mode,
+        ...$attributes,
+    ]);
+
+    return app(ApproveRental::class)->handle($listed->owner, $rental)->refresh();
 }

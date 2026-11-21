@@ -144,4 +144,15 @@ return [
 
     'CohabitationGender' => ['female' => 'Mujer', 'male' => 'Hombre'],
 
+    'PaymentAttemptStatus' => ['processing' => 'En proceso', 'succeeded' => 'Aprobado', 'failed' => 'Rechazado'],
+
+    'LedgerAccount' => [
+        'client' => 'Cliente',
+        'platform_commission' => 'Comisión de la plataforma',
+        'owner_payable' => 'Por pagar al propietario',
+        'deposits_held' => 'Depósitos en garantía',
+    ],
+
+    'SimulatedOutcome' => ['approve' => 'Aprobar', 'decline' => 'Rechazar', 'delay' => 'Responder con demora'],
+
 ];

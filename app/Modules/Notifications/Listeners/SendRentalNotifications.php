@@ -3,9 +3,8 @@
 namespace App\Modules\Notifications\Listeners;
 
 use App\Models\User;
-use App\Modules\Identity\Enums\Role;
 use App\Modules\Notifications\Messages\PlatformMessage;
-use App\Modules\Properties\Enums\ManagementMode;
+use App\Modules\Notifications\Support\RentalOperators;
 use App\Modules\Rentals\Events\RentalApproved;
 use App\Modules\Rentals\Events\RentalCancelled;
 use App\Modules\Rentals\Events\RentalConfirmed;
@@ -108,11 +107,7 @@ class SendRentalNotifications
      */
     private function operators(Rental $rental): Collection
     {
-        if ($rental->management_mode === ManagementMode::SelfManaged) {
-            return collect([$rental->property->owner]);
-        }
-
-        return User::role(Role::Admin->value)->whereNull('suspended_at')->get()->toBase();
+        return RentalOperators::of($rental);
     }
 
     /**

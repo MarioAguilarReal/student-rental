@@ -87,3 +87,15 @@ Historias: HU-08.01 a HU-08.07.
 - **Pantallas:** "Mis rentas" (el cliente ve la dirección exacta y el contacto al confirmarse), "Rentas" para propietarios y administradores (solo lectura en administradas) y el detalle con aprobar, rechazar y cancelar (solo administradores, RN-66).
 - **Notificaciones** (correo + base de datos) y **auditoría** de cada cambio de estado.
 - **Pendiente para la Iteración 7:** pagar el primer cargo llama a `ConfirmRental` (RN-71), que ya rechaza automáticamente las solicitudes en conflicto (RN-24). Mientras tanto, una renta aprobada expira a las 48 h.
+
+## Iteración 7 — ✅ completada (2026-11-24)
+
+Historias: HU-09.01 a HU-09.05 y HU-03.04 (gestión).
+
+- **Pago de prueba** desde el detalle de la renta: el cliente paga el cargo que toca (en orden, D-75) en un diálogo que dice claramente "Pago de prueba". Pagar el primer cargo confirma la renta (RN-71) y rechaza las solicitudes en conflicto (RN-24). Un pago rechazado se puede reintentar.
+- **Pasarela** detrás de `Payments\Contracts\PaymentGateway` (D-05) con `SimulatedGateway`: aprueba por defecto; el Super Admin la configura para rechazar o responder con demora (RN-72, D-76, D-77).
+- **Ledger de partida doble** (RN-73): por cada cargo pagado, cliente → comisión de la plataforma + por pagar al propietario + depósitos en garantía; inmutable en PostgreSQL (RN-75, D-78).
+- **Cargos vencidos** (RN-74): tarea diaria a las 00:10; aviso al cliente y al operador (D-80).
+- **Pantallas:** "Ingresos" del propietario (cobrado, comisión, neto, por cobrar y depósitos, por renta), "Finanzas" para administradores (comisiones, saldos por pagar a propietarios, depósitos, cargos vencidos y últimos pagos), "Comisiones" (tarifas con vigencia, D-79) y "Pagos de prueba" para el Super Admin.
+- **Notificaciones** (recibo, pago rechazado, cargo vencido) y **auditoría** de pagos, comisiones y escenarios.
+- **Fuera del MVP:** reembolsos (B-01), pasarela real (B-02), pagos a propietarios (B-03) y penalizaciones (B-11).

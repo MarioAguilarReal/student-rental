@@ -9,6 +9,12 @@ use App\Modules\Identity\Events\UserSuspended;
 use App\Modules\Inspections\Events\ChecklistPublished;
 use App\Modules\Inspections\Events\InspectionAssigned;
 use App\Modules\Inspections\Events\InspectionCompleted;
+use App\Modules\Payments\Events\ChargeOverdue;
+use App\Modules\Payments\Events\ChargePaid;
+use App\Modules\Payments\Events\ChargePaymentFailed;
+use App\Modules\Payments\Events\CommissionRuleRemoved;
+use App\Modules\Payments\Events\CommissionRuleScheduled;
+use App\Modules\Payments\Events\PaymentSimulationConfigured;
 use App\Modules\Pricing\Events\UnitPricingUpdated;
 use App\Modules\Properties\Events\PropertyArchived;
 use App\Modules\Properties\Events\PropertyPaused;
@@ -54,5 +60,11 @@ final class AuditServiceProvider extends ModuleServiceProvider
         RentalStarted::class => [[RecordAuditTrail::class, 'rentalChanged']],
         RentalCompleted::class => [[RecordAuditTrail::class, 'rentalChanged']],
         RentalCancelled::class => [[RecordAuditTrail::class, 'rentalChanged']],
+        ChargePaid::class => [[RecordAuditTrail::class, 'chargeChanged']],
+        ChargePaymentFailed::class => [[RecordAuditTrail::class, 'chargeChanged']],
+        ChargeOverdue::class => [[RecordAuditTrail::class, 'chargeChanged']],
+        CommissionRuleScheduled::class => [[RecordAuditTrail::class, 'commissionRuleScheduled']],
+        CommissionRuleRemoved::class => [[RecordAuditTrail::class, 'commissionRuleRemoved']],
+        PaymentSimulationConfigured::class => [[RecordAuditTrail::class, 'paymentSimulationConfigured']],
     ];
 }

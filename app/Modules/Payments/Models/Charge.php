@@ -7,8 +7,10 @@ use App\Modules\Payments\Enums\ChargeStatus;
 use App\Modules\Rentals\Models\Rental;
 use App\Modules\Shared\Money;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * One payment the client owes for a rental (RN-70). Rent and deposit are kept apart (RN-73).
@@ -24,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ChargeStatus $status
  * @property CarbonImmutable|null $paid_at
  * @property-read Rental $rental
+ * @property-read Collection<int, PaymentAttempt> $attempts
  */
 class Charge extends Model
 {
@@ -48,6 +51,19 @@ class Charge extends Model
     public function rental(): BelongsTo
     {
         return $this->belongsTo(Rental::class);
+    }
+
+    /**
+     * @return HasMany<PaymentAttempt, $this>
+     */
+    public function attempts(): HasMany
+    {
+        return $this->hasMany(PaymentAttempt::class);
+    }
+
+    public function isUnpaid(): bool
+    {
+        return in_array($this->status, ChargeStatus::unpaid(), true);
     }
 
     public function amount(): Money

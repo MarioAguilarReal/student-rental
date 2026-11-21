@@ -29,6 +29,7 @@ export type RentalSummary = {
 };
 
 export type RentalCharge = {
+    id: number;
     number: number;
     concept_label: string;
     amount_minor: number;
@@ -36,6 +37,7 @@ export type RentalCharge = {
     due_on: string;
     status: string;
     status_label: string;
+    payable: boolean;
 };
 
 export type RentalDetail = RentalSummary & {

@@ -8,6 +8,12 @@ use App\Modules\Identity\Events\UserSuspended;
 use App\Modules\Inspections\Events\ChecklistPublished;
 use App\Modules\Inspections\Events\InspectionAssigned;
 use App\Modules\Inspections\Events\InspectionCompleted;
+use App\Modules\Payments\Events\ChargeOverdue;
+use App\Modules\Payments\Events\ChargePaid;
+use App\Modules\Payments\Events\ChargePaymentFailed;
+use App\Modules\Payments\Events\CommissionRuleRemoved;
+use App\Modules\Payments\Events\CommissionRuleScheduled;
+use App\Modules\Payments\Events\PaymentSimulationConfigured;
 use App\Modules\Pricing\Events\UnitPricingUpdated;
 use App\Modules\Properties\Events\PropertyArchived;
 use App\Modules\Properties\Events\PropertyPaused;
@@ -146,6 +152,64 @@ class RecordAuditTrail
                 'commercial' => $event instanceof RentalRequested ? $this->commercialCopy($rental) : null,
             ]))
             ->log('Rental '.$rental->status->value);
+    }
+
+    /**
+     * HU-09.01 / RN-74: payments and overdue charges, with the gateway's reference.
+     */
+    public function chargeChanged(ChargePaid|ChargePaymentFailed|ChargeOverdue $event): void
+    {
+        $charge = $event->charge;
+        $attempt = $event instanceof ChargeOverdue ? null : $event->attempt;
+        $logger = activity('payment')->performedOn($charge);
+        $logger = $attempt ? $logger->causedBy($attempt->client) : $logger->causedByAnonymous();
+        $name = match (true) {
+            $event instanceof ChargePaid => 'paid',
+            $event instanceof ChargePaymentFailed => 'failed',
+            default => 'overdue',
+        };
+
+        $logger->event($name)
+            ->withProperties(array_filter([
+                'rental_id' => $charge->rental_id,
+                'number' => $charge->number,
+                'amount_minor' => $charge->rent_minor + $charge->deposit_minor,
+                'gateway' => $attempt?->gateway,
+                'reference' => $attempt?->reference,
+            ], fn ($value) => $value !== null))
+            ->log('Charge '.$name);
+    }
+
+    public function commissionRuleScheduled(CommissionRuleScheduled $event): void
+    {
+        activity('payment')->performedOn($event->rule)->causedBy($event->actor)
+            ->event('commission_scheduled')
+            ->withProperties([
+                'management_mode' => $event->rule->management_mode->value,
+                'percentage_bp' => $event->rule->percentage_bp,
+                'valid_from' => $event->rule->valid_from->toDateString(),
+            ])
+            ->log('Commission rate scheduled');
+    }
+
+    public function commissionRuleRemoved(CommissionRuleRemoved $event): void
+    {
+        activity('payment')->causedBy($event->actor)
+            ->event('commission_removed')
+            ->withProperties([
+                'management_mode' => $event->rule->management_mode->value,
+                'percentage_bp' => $event->rule->percentage_bp,
+                'valid_from' => $event->rule->valid_from->toDateString(),
+            ])
+            ->log('Scheduled commission rate removed');
+    }
+
+    public function paymentSimulationConfigured(PaymentSimulationConfigured $event): void
+    {
+        activity('payment')->performedOn($event->setting)->causedBy($event->actor)
+            ->event('simulation_configured')
+            ->withProperties(['outcome' => $event->setting->outcome->value, 'delay_seconds' => $event->setting->delay_seconds])
+            ->log('Payment simulation configured');
     }
 
     /**

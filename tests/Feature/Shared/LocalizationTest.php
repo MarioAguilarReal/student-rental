@@ -14,6 +14,9 @@ use App\Modules\Inspections\Enums\InspectionType;
 use App\Modules\Inspections\Enums\ItemScope;
 use App\Modules\Payments\Enums\ChargeConcept;
 use App\Modules\Payments\Enums\ChargeStatus;
+use App\Modules\Payments\Enums\LedgerAccount;
+use App\Modules\Payments\Enums\PaymentAttemptStatus;
+use App\Modules\Payments\Enums\SimulatedOutcome;
 use App\Modules\Pricing\Enums\BlockReason;
 use App\Modules\Pricing\Enums\RatePeriod;
 use App\Modules\Properties\Enums\GenderPolicy;
@@ -46,6 +49,7 @@ it('has a Spanish label for every enum case shown to users', function () {
         ChecklistStatus::class, ChecklistCategory::class, ItemScope::class,
         InspectionType::class, InspectionStatus::class, InspectionResult::class, AnswerResult::class,
         RentalStatus::class, ChargeStatus::class, ChargeConcept::class, CohabitationGender::class,
+        PaymentAttemptStatus::class, LedgerAccount::class, SimulatedOutcome::class,
     ];
 
     foreach (collect($enums)->flatMap(fn (string $enum) => $enum::cases()) as $case) {

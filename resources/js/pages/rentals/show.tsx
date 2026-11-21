@@ -3,6 +3,7 @@ import { BadgeCheck } from 'lucide-react';
 import type { ReactNode } from 'react';
 import InputError from '@/components/input-error';
 import Page, { PageSection } from '@/components/page';
+import PayChargeDialog from '@/components/payments/pay-charge-dialog';
 import RentalStatusBadge from '@/components/rentals/rental-status-badge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -231,9 +232,15 @@ export default function RentalShow({
                     {rental.charges.length > 0 && (
                         <PageSection
                             title={t('Charges')}
-                            description={t(
-                                'The amounts were fixed when the rental was approved.',
-                            )}
+                            description={
+                                isClient
+                                    ? t(
+                                          'The amounts were fixed when the rental was approved. Payments are test payments: no real money moves.',
+                                      )
+                                    : t(
+                                          'The amounts were fixed when the rental was approved.',
+                                      )
+                            }
                         >
                             <ul className="divide-y rounded-xl border">
                                 {rental.charges.map((charge) => (
@@ -264,6 +271,14 @@ export default function RentalShow({
                                         >
                                             {charge.status_label}
                                         </Badge>
+                                        {charge.payable && (
+                                            <PayChargeDialog
+                                                rentalId={rental.id}
+                                                charge={charge}
+                                                currency={rental.currency}
+                                                folio={rental.folio}
+                                            />
+                                        )}
                                     </li>
                                 ))}
                             </ul>
@@ -316,7 +331,7 @@ function StatusNote({
         case 'approved':
             note = isClient
                 ? t(
-                      'Approved. Pay the first charge before :date to confirm your rental. Online payment opens very soon.',
+                      'Approved. Pay the first charge before :date to confirm your rental.',
                       { date: until },
                   )
                 : t(

@@ -3,7 +3,9 @@
 namespace App\Modules\Rentals\Presenters;
 
 use App\Models\User;
+use App\Modules\Identity\Enums\Permission;
 use App\Modules\Payments\Models\Charge;
+use App\Modules\Payments\Support\ChargePayability;
 use App\Modules\Properties\Enums\ManagementMode;
 use App\Modules\Rentals\Models\Rental;
 use App\Modules\Shared\Money;
@@ -58,6 +60,7 @@ class RentalPresenter
         $isClient = $rental->client_id === $viewer->id;
         $showAddress = ! $isClient || $rental->status->revealsAddress();
         $commission = Money::ofMinor($rental->total_minor, $rental->currency)->percentage($rental->commission_bp);
+        $payable = $isClient && $viewer->can(Permission::ChargesPay->value) ? ChargePayability::next($rental) : null;
 
         return [
             ...$this->summary($rental),
@@ -73,7 +76,8 @@ class RentalPresenter
             'owner_net_minor' => $isClient ? null : $rental->total_minor - $commission->minorAmount(),
             'commission_bp' => $isClient ? null : $rental->commission_bp,
             'applicant' => $isClient ? null : $this->applicant($rental),
-            'charges' => $rental->charges->map(fn (Charge $charge): array => [
+            'charges' => $rental->charges->sortBy('number')->map(fn (Charge $charge): array => [
+                'id' => $charge->id,
                 'number' => $charge->number,
                 'concept_label' => $charge->concept->label(),
                 'amount_minor' => $charge->rent_minor + $charge->deposit_minor,
@@ -81,6 +85,7 @@ class RentalPresenter
                 'due_on' => $charge->due_on->toDateString(),
                 'status' => $charge->status->value,
                 'status_label' => $charge->status->label(),
+                'payable' => $payable?->id === $charge->id,
             ])->values(),
         ];
     }

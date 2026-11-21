@@ -1,6 +1,10 @@
 import {
     BadgeCheck,
+    Banknote,
     Building2,
+    CreditCard,
+    Landmark,
+    Percent,
     CalendarDays,
     ClipboardList,
     ListTodo,
@@ -19,6 +23,9 @@ import { index as amenitiesIndex } from '@/routes/catalog/amenities';
 import { index as houseRulesIndex } from '@/routes/catalog/house-rules';
 import { index as institutionsIndex } from '@/routes/catalog/institutions';
 import { index as checklistsIndex } from '@/routes/checklists';
+import { index as commissionRules } from '@/routes/commission-rules';
+import { edit as paymentSimulation } from '@/routes/payment-simulation';
+import { balance, finance } from '@/routes/payments';
 import { agenda as inspectionAgenda } from '@/routes/inspections';
 import { index as inspectionQueue } from '@/routes/inspections/queue';
 import { index as myProperties } from '@/routes/properties';
@@ -58,6 +65,12 @@ const mainItems: GuardedNavItem[] = [
         permissions: ['properties.create', 'properties.view_any'],
     },
     {
+        title: 'Income',
+        href: balance(),
+        icon: Banknote,
+        permissions: ['properties.create'],
+    },
+    {
         title: 'My inspections',
         href: inspectionAgenda(),
         icon: CalendarDays,
@@ -66,6 +79,12 @@ const mainItems: GuardedNavItem[] = [
 ];
 
 const adminItems: GuardedNavItem[] = [
+    {
+        title: 'Finance',
+        href: finance(),
+        icon: Landmark,
+        permissions: ['properties.view_any'],
+    },
     {
         title: 'Properties',
         href: allProperties(),
@@ -113,6 +132,18 @@ const adminItems: GuardedNavItem[] = [
         href: checklistsIndex(),
         icon: ListTodo,
         permissions: ['catalog.manage'],
+    },
+    {
+        title: 'Commissions',
+        href: commissionRules(),
+        icon: Percent,
+        permissions: ['payments.commission_rules.manage'],
+    },
+    {
+        title: 'Test payments',
+        href: paymentSimulation(),
+        icon: CreditCard,
+        permissions: ['payments.simulation.configure'],
     },
 ];
 
