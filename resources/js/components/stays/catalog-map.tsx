@@ -6,6 +6,7 @@ import { useTranslation } from '@/lib/i18n';
 import { formatMoney } from '@/lib/money';
 import { show } from '@/routes/stays';
 import type { ListingCardData } from '@/types';
+import { cssVar } from '@/lib/css-var';
 
 type Props = {
     listings: ListingCardData[];
@@ -62,14 +63,14 @@ export default function CatalogMap({
         if (campus) {
             L.circle([campus.lat, campus.lng], {
                 radius: radiusKm * 1000,
-                color: '#1b6c80',
+                color: cssVar('--brand'),
                 weight: 1,
                 fillOpacity: 0.06,
             }).addTo(layer.current);
             L.marker([campus.lat, campus.lng], {
                 icon: L.divIcon({
                     className: '',
-                    html: `<span style="display:block;padding:2px 8px;border-radius:9999px;background:#1b6c80;color:#fff;font:600 12px/1.6 'IBM Plex Sans',sans-serif;white-space:nowrap">${escape(campus.name)}</span>`,
+                    html: `<span class="map-pill" data-campus>${escape(campus.name)}</span>`,
                     iconAnchor: [20, 10],
                 }),
                 keyboard: false,
@@ -83,7 +84,7 @@ export default function CatalogMap({
                 title: listing.title,
                 icon: L.divIcon({
                     className: '',
-                    html: `<span style="display:block;padding:2px 8px;border-radius:9999px;border:1px solid #cdd0d2;background:${active ? '#131416' : '#fff'};color:${active ? '#fff' : '#131416'};font:600 13px/1.6 'IBM Plex Sans',sans-serif;white-space:nowrap">${escape(formatMoney(listing.min_price_minor))}</span>`,
+                    html: `<span class="map-pill"${active ? ' data-active' : ''}>${escape(formatMoney(listing.min_price_minor))}</span>`,
                     iconAnchor: [28, 12],
                 }),
             });

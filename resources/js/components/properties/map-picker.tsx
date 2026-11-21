@@ -15,7 +15,7 @@ const DEFAULT_CENTER: L.LatLngTuple = [23.6345, -102.5528];
 
 const pinIcon = L.divIcon({
     className: '',
-    html: '<span style="display:block;width:22px;height:22px;border-radius:9999px;background:#e11d48;border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,.4)"></span>',
+    html: '<span class="map-pin"></span>',
     iconSize: [22, 22],
     iconAnchor: [11, 11],
 });

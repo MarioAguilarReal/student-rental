@@ -2,6 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from '@/lib/i18n';
+import { cssVar } from '@/lib/css-var';
 
 /**
  * The area of a property (≈500 m circle). The exact address is shared once a rental is confirmed.
@@ -30,7 +31,7 @@ export default function ApproximateMap({
         }).addTo(map);
         L.circle([lat, lng], {
             radius: 450,
-            color: '#1b6c80',
+            color: cssVar('--brand'),
             weight: 1,
             fillOpacity: 0.12,
         }).addTo(map);

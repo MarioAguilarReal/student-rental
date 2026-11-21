@@ -44,7 +44,9 @@ export default function ListingCard({
                 {badge && <div className="absolute top-3 left-3">{badge}</div>}
             </div>
             <div className="mt-3 space-y-0.5">
-                <p className="truncate font-semibold">{title}</p>
+                <p className="line-clamp-2 leading-snug font-semibold">
+                    {title}
+                </p>
                 {lines.map((line, index) => (
                     <p
                         key={index}

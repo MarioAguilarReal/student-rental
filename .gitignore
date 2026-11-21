@@ -39,3 +39,6 @@ yarn-error.log
 /.pi
 /opencode.json
 /opencode.jsonc
+
+# Design review screenshots (design-taste-frontend)
+/.taste-skill

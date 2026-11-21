@@ -118,7 +118,9 @@ export default function StayShow({
                                       })}
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                                {property.gender_policy}
+                                {t('Coexistence: :policy', {
+                                    policy: property.gender_policy,
+                                })}
                                 {property.communities.length > 0 &&
                                     ` · ${t('Only :list', { list: property.communities.join(', ') })}`}
                             </p>
@@ -501,7 +503,7 @@ function QuoteCard({
     return (
         <div className="space-y-4 rounded-2xl border p-5">
             <p>
-                <span className="tabular text-xl font-semibold">
+                <span className="tabular text-2xl font-semibold text-brand-ink">
                     {formatMoney(plan.price_minor)}
                 </span>{' '}
                 <span className="text-muted-foreground">

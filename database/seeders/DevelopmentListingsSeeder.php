@@ -23,7 +23,8 @@ use Illuminate\Database\Seeder;
 
 /**
  * Ten published, inspected demo listings in Tepic, Nayarit (around the UAN and downtown) with
- * generated placeholder photos, so the public catalog has something to show. Local only;
+ * openly licensed photos (database/seeders/photos, credited in CREDITS.md; a coloured
+ * placeholder if one is missing), so the public catalog has something to show. Local only;
  * skipped if the demo host already has properties. Addresses and postal codes are illustrative.
  */
 class DevelopmentListingsSeeder extends Seeder
@@ -138,12 +139,30 @@ class DevelopmentListingsSeeder extends Seeder
                 UnitDeposit::create(['unit_id' => $unit->id, 'amount_minor' => $monthly]);
             }
 
-            foreach (['Fachada', 'Sala', 'Habitación'] as $label) {
-                $property->addMediaFromString($this->placeholderJpeg($listing['color'], $label))
-                    ->usingFileName(strtolower($label).'.jpg')
-                    ->withCustomProperties(['alt' => "{$label} (foto de demostración)", 'unit_id' => null])
-                    ->toMediaCollection(Property::PHOTOS);
-            }
+            $this->attachPhotos($property, $index, $units[0][0] === UnitType::Bed, $listing['color']);
+        }
+    }
+
+    /**
+     * Façade, living room and bedroom (dormitory for shared beds) from the demo photo bank.
+     */
+    public function attachPhotos(Property $property, int $index, bool $sharedBeds, string $fallbackColor): void
+    {
+        $photos = [
+            'Fachada' => 'facade-'.($index % 6 + 1),
+            'Sala' => 'living-'.(($index + 2) % 6 + 1),
+            'Habitación' => $sharedBeds ? 'dorm-'.($index % 2 + 1) : 'bedroom-'.($index % 4 + 1),
+        ];
+
+        foreach ($photos as $label => $file) {
+            $path = database_path("seeders/photos/{$file}.jpg");
+            $adder = is_file($path)
+                ? $property->addMedia($path)->preservingOriginal()
+                : $property->addMediaFromString($this->placeholderJpeg($fallbackColor, $label));
+
+            $adder->usingFileName(strtolower($label).'.jpg')
+                ->withCustomProperties(['alt' => "{$label} (foto de demostración)", 'unit_id' => null])
+                ->toMediaCollection(Property::PHOTOS);
         }
     }
 

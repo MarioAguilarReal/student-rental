@@ -52,6 +52,10 @@
     --color-brand: var(--brand);
     --color-brand-foreground: var(--brand-foreground);
     --color-brand-soft: var(--brand-soft);
+    --color-brand-ink: var(--brand-ink);
+    --color-sun: var(--sun);
+    --color-sun-foreground: var(--sun-foreground);
+    --color-sun-soft: var(--sun-soft);
     --color-positive: var(--positive);
     --color-positive-soft: var(--positive-soft);
     --color-positive-ink: var(--positive-ink);
@@ -74,112 +78,162 @@
 }
 
 /*
- * Tokens — "Framed sheet" style (docs/spec/09-sistema-diseno.md).
- * The chrome (sidebar + top bar) sits on a teal-tinted frame; work happens on white sheets.
- * Colour budget: the brand teal only on the mark, the active tab/selection and the main data.
- * Primary actions are near-black (ink). Light first; dark is a true-neutral variant.
+ * Tokens — "Pacífico y sol" palette on the framed-sheet layout (docs/spec/09-sistema-diseno.md).
+ * Turquoise from Nayarit's coast is the brand and the primary action; sun yellow marks prices on
+ * the map and the one highlight; neutrals are tinted from the brand hue. Every text pair is
+ * AA (4.5:1 or more); white on brand is 5.4:1, ink on sun 10.4:1. Dark is a tinted variant.
  */
 :root {
-    --background: #f5f8f8; /* frame: one low-chroma step of the brand teal */
-    --foreground: #131416;
+    --background: #eef7f6; /* frame: one low-chroma step of the brand */
+    --foreground: #0f1a19;
     --card: #ffffff; /* sheet and panels */
-    --card-foreground: #131416;
+    --card-foreground: #0f1a19;
     --popover: #ffffff;
-    --popover-foreground: #131416;
-    --primary: #131416; /* near-black primary action */
+    --popover-foreground: #0f1a19;
+    --primary: #00786f; /* brand turquoise primary action, white text 5.4:1 */
     --primary-foreground: #ffffff;
-    --secondary: #eef1f1;
-    --secondary-foreground: #131416;
-    --muted: #f4f6f6;
-    --muted-foreground: #5d5f60; /* 6.4:1 on white */
-    --accent: #ebeeee; /* hover / active row, not a brand colour */
-    --accent-foreground: #131416;
+    --secondary: #e6f2f0;
+    --secondary-foreground: #0f1a19;
+    --muted: #f1f7f6;
+    --muted-foreground: #4b5b5a; /* 7.1:1 on white */
+    --accent: #e3f1ef; /* hover / active row */
+    --accent-foreground: #0f1a19;
     --destructive: #c4242a;
     --destructive-foreground: #c4242a;
-    --border: #e6e9ea;
-    --input: #cdd0d2; /* controls: one step darker than card edges */
-    --ring: #1b6c80;
-    --raised: #f4f6f6;
-    --control: #cdd0d2;
+    --border: #dbe8e6;
+    --input: #bfd3d0; /* controls: one step darker than card edges */
+    --ring: #00786f;
+    --raised: #f1f7f6;
+    --control: #bfd3d0;
 
-    --brand: #1b6c80;
+    --brand: #00786f;
     --brand-foreground: #ffffff;
-    --brand-soft: #e3f0f3;
+    --brand-soft: #d8f3ef;
+    --brand-ink: #00524c; /* brand text on brand-soft, 8.4:1 */
+    --sun: #ffc53d;
+    --sun-foreground: #2b1d00; /* 10.4:1 on sun */
+    --sun-soft: #fff4d6;
     --positive: #1e7b4f;
     --positive-soft: #dcfae5;
     --positive-ink: #04250e;
     --negative: #c4242a;
     --negative-soft: #ffedea;
     --negative-ink: #831c1e;
-    --warning-soft: #fffbeb;
-    --warning-ink: #92400e;
+    --warning-soft: #fff4d6;
+    --warning-ink: #7a4a00;
 
-    --chart-1: #1b6c80;
-    --chart-2: #2f70bb;
-    --chart-3: #a86f0c;
-    --chart-4: #5d5f60;
-    --chart-5: #9aa0a3;
+    --chart-1: #00786f;
+    --chart-2: #e0a100;
+    --chart-3: #d6336c;
+    --chart-4: #4b5b5a;
+    --chart-5: #9ab1ae;
     --radius: 0.75rem; /* 12px cards and photos; controls 8px; sheet 16px */
 
-    --sidebar: #f5f8f8; /* same as the frame: sidebar and top bar form one L */
-    --sidebar-foreground: #3b3d3f;
-    --sidebar-primary: #1b6c80;
+    --sidebar: #eef7f6; /* same as the frame: sidebar and top bar form one L */
+    --sidebar-foreground: #33413f;
+    --sidebar-primary: #00786f;
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #e7ecec; /* active item: neutral pill */
-    --sidebar-accent-foreground: #131416;
+    --sidebar-accent: #d8f3ef; /* active item: brand-soft pill */
+    --sidebar-accent-foreground: #00524c;
     --sidebar-border: transparent;
-    --sidebar-ring: #1b6c80;
+    --sidebar-ring: #00786f;
 }
 
 .dark {
-    --background: #0b0c0c;
-    --foreground: #f4f4f5;
-    --card: #141516;
-    --card-foreground: #f4f4f5;
-    --popover: #1b1c1e;
-    --popover-foreground: #f4f4f5;
-    --primary: #f4f4f5;
-    --primary-foreground: #131416;
-    --secondary: #222326;
-    --secondary-foreground: #f4f4f5;
-    --muted: #1c1d1f;
-    --muted-foreground: #b4b4b4;
-    --accent: #232427;
-    --accent-foreground: #f4f4f5;
+    --background: #081110;
+    --foreground: #eef7f6;
+    --card: #0f1a19;
+    --card-foreground: #eef7f6;
+    --popover: #142221;
+    --popover-foreground: #eef7f6;
+    --primary: #2ed3c0; /* dark ink on it, 8.9:1 */
+    --primary-foreground: #032220;
+    --secondary: #172625;
+    --secondary-foreground: #eef7f6;
+    --muted: #13201f;
+    --muted-foreground: #a9bcb9;
+    --accent: #172625;
+    --accent-foreground: #eef7f6;
     --destructive: #f05252;
     --destructive-foreground: #f87171;
-    --border: #2a2b2e;
-    --input: #3d3f42;
-    --ring: #5bb6cb;
-    --raised: #1c1d1f;
-    --control: #3d3f42;
+    --border: #1e2e2c;
+    --input: #2f4441;
+    --ring: #2ed3c0;
+    --raised: #13201f;
+    --control: #2f4441;
 
-    --brand: #5bb6cb;
-    --brand-foreground: #0b0c0c;
-    --brand-soft: #12292f;
+    --brand: #2ed3c0;
+    --brand-foreground: #032220;
+    --brand-soft: #0f2f2b;
+    --brand-ink: #9ef0e4;
+    --sun: #ffd166;
+    --sun-foreground: #2b1d00;
+    --sun-soft: #2e2410;
     --positive: #3fc07a;
     --positive-soft: #172a1d;
     --positive-ink: #a7f0c4;
     --negative: #f87171;
     --negative-soft: #2d1515;
     --negative-ink: #fecaca;
-    --warning-soft: #2a2110;
+    --warning-soft: #2e2410;
     --warning-ink: #fcd34d;
 
-    --chart-1: #5bb6cb;
-    --chart-2: #6ea6ea;
-    --chart-3: #e0a83a;
-    --chart-4: #b4b4b4;
-    --chart-5: #6b6f73;
+    --chart-1: #2ed3c0;
+    --chart-2: #ffd166;
+    --chart-3: #f472a8;
+    --chart-4: #a9bcb9;
+    --chart-5: #5d7471;
 
-    --sidebar: #0b0c0c;
-    --sidebar-foreground: #c9c9cc;
-    --sidebar-primary: #5bb6cb;
-    --sidebar-primary-foreground: #0b0c0c;
-    --sidebar-accent: #1f2023;
-    --sidebar-accent-foreground: #f4f4f5;
+    --sidebar: #081110;
+    --sidebar-foreground: #c3d3d0;
+    --sidebar-primary: #2ed3c0;
+    --sidebar-primary-foreground: #032220;
+    --sidebar-accent: #0f2f2b;
+    --sidebar-accent-foreground: #9ef0e4;
     --sidebar-border: transparent;
-    --sidebar-ring: #5bb6cb;
+    --sidebar-ring: #2ed3c0;
+}
+
+/* Map markers (Leaflet div icons): prices in sun yellow, the active listing and the campus in
+ * the brand. They float over the map, so a small shadow is allowed (docs/spec/09 §2). */
+@layer components {
+    .map-pill {
+        display: block;
+        padding: 2px 9px;
+        border-radius: 9999px;
+        font:
+            600 13px/1.6 'IBM Plex Sans',
+            sans-serif;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        background: var(--sun);
+        color: var(--sun-foreground);
+        box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+        transition: transform 150ms ease;
+    }
+
+    .map-pill:hover,
+    .map-pill[data-active] {
+        background: var(--brand);
+        color: var(--brand-foreground);
+        transform: scale(1.08);
+    }
+
+    .map-pill[data-campus] {
+        font-size: 12px;
+        background: var(--brand);
+        color: var(--brand-foreground);
+    }
+
+    .map-pin {
+        display: block;
+        width: 22px;
+        height: 22px;
+        border-radius: 9999px;
+        background: var(--brand);
+        border: 3px solid #fff;
+        box-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+    }
 }
 
 @layer base {

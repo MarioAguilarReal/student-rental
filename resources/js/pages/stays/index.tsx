@@ -1,5 +1,11 @@
 import { Head, router } from '@inertiajs/react';
-import { List, Map as MapIcon, Search, SlidersHorizontal } from 'lucide-react';
+import {
+    ChevronDown,
+    List,
+    Map as MapIcon,
+    Search,
+    SlidersHorizontal,
+} from 'lucide-react';
 import { useState } from 'react';
 import EmptyState from '@/components/empty-state';
 import ListingCard from '@/components/listing-card';
@@ -50,6 +56,18 @@ export default function StaysIndex({
     const [showMap, setShowMap] = useState(false);
     const [highlighted, setHighlighted] = useState<number | null>(null);
     const [draft, setDraft] = useState(filters);
+    // On a phone the search folds into one summary line so the first homes show on screen.
+    const [searchOpen, setSearchOpen] = useState(false);
+    const searchSummary = [
+        options.campuses.find(
+            (option) => String(option.value) === filters.campus,
+        )?.label ?? t('Any campus'),
+        options.periods.find((period) => period.value === filters.period)
+            ?.label,
+        filters.move_in || t('Any date'),
+    ]
+        .filter(Boolean)
+        .join(' · ');
     const periodLabel =
         options.periods
             .find((period) => period.value === filters.period)
@@ -94,14 +112,48 @@ export default function StaysIndex({
         <>
             <Head title={t('Find a place near your campus')} />
 
-            <section className="border-b bg-card">
-                <div className="mx-auto w-full max-w-7xl space-y-4 px-4 py-6 md:px-8">
-                    <h1 className="text-[22px] font-semibold tracking-tight md:text-[28px]">
-                        {t('Inspected homes near your campus')}
-                    </h1>
+            <section className="bg-brand-soft">
+                <div className="mx-auto w-full max-w-7xl space-y-5 px-4 py-6 md:px-8 md:py-10">
+                    <div className="space-y-1.5">
+                        <h1 className="text-[24px] leading-tight font-semibold tracking-tight text-foreground md:text-[34px]">
+                            {t('Inspected homes near your campus')}
+                        </h1>
+                        <p className="max-w-2xl text-base text-foreground/80">
+                            {t(
+                                'An inspector visits every home before it is listed. Rent by the week, month or year.',
+                            )}
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => setSearchOpen(!searchOpen)}
+                        aria-expanded={searchOpen}
+                        aria-controls="catalog-search"
+                        className="flex w-full items-center gap-3 rounded-full border border-input bg-card px-4 py-3 text-left text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:hidden"
+                    >
+                        <Search
+                            className="size-4 shrink-0 text-brand"
+                            aria-hidden
+                        />
+                        <span className="min-w-0 flex-1 truncate font-medium">
+                            {searchSummary}
+                        </span>
+                        <ChevronDown
+                            className={cn(
+                                'size-4 shrink-0 transition-transform',
+                                searchOpen && 'rotate-180',
+                            )}
+                            aria-hidden
+                        />
+                    </button>
 
                     <form
-                        className="grid gap-2 rounded-2xl border p-2 md:grid-cols-[2fr_1fr_1fr_1fr_auto] md:rounded-full"
+                        id="catalog-search"
+                        className={cn(
+                            'grid gap-2 rounded-2xl border border-input bg-card p-2 sm:grid sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_auto] lg:rounded-full',
+                            !searchOpen && 'hidden',
+                        )}
                         onSubmit={(event) => {
                             event.preventDefault();
                             apply({
@@ -152,6 +204,11 @@ export default function StaysIndex({
                                     </option>
                                 ))}
                             </NativeSelect>
+                            {!draft.campus && (
+                                <span className="text-xs text-muted-foreground">
+                                    {t('Choose a campus first')}
+                                </span>
+                            )}
                         </SearchField>
                         <SearchField label={t('Stay')}>
                             <NativeSelect
@@ -190,7 +247,8 @@ export default function StaysIndex({
                         <Button
                             type="submit"
                             size="lg"
-                            className="rounded-full"
+                            className="h-12 rounded-full sm:col-span-2 lg:col-span-1 lg:self-center"
+                            onClick={() => setSearchOpen(false)}
                         >
                             <Search /> {t('Search')}
                         </Button>
@@ -213,8 +271,8 @@ export default function StaysIndex({
                                 className={cn(
                                     'shrink-0 rounded-full border px-4 py-1.5 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98]',
                                     (filters.type ?? '') === type.value
-                                        ? 'border-foreground bg-foreground text-background'
-                                        : 'border-input hover:border-foreground',
+                                        ? 'border-brand bg-brand text-brand-foreground'
+                                        : 'border-input bg-card hover:border-brand hover:text-brand-ink',
                                 )}
                             >
                                 {type.label}
@@ -223,7 +281,7 @@ export default function StaysIndex({
                         <Button
                             variant="outline"
                             size="sm"
-                            className="shrink-0 rounded-full"
+                            className="h-auto shrink-0 rounded-full py-1.5"
                             onClick={() => setMoreOpen(true)}
                         >
                             <SlidersHorizontal /> {t('More filters')}
@@ -524,7 +582,7 @@ function SearchField({
     children: React.ReactNode;
 }) {
     return (
-        <label className="flex flex-col rounded-xl px-4 py-1.5 transition-colors focus-within:bg-muted hover:bg-muted md:rounded-full">
+        <label className="flex min-w-0 flex-col rounded-xl px-4 py-1.5 transition-colors focus-within:bg-muted hover:bg-muted lg:rounded-full">
             <span className="text-xs font-semibold">{label}</span>
             {children}
         </label>
